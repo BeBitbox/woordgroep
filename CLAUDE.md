@@ -1,9 +1,9 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
-
 ## Project
-De naam van dit project is `woordgroep`. De taal is in het Nederlands.
+- De naam van dit project is `woordgroep`. Het is een eenvoudig woordspel die 4×4-grid van 16 woorden toont, waarvan er 4 woordgroepen bestaan.
+- De website is volledig in het Nederlands.
+- De website is mobiel responsief
 
 ## Commando's
 

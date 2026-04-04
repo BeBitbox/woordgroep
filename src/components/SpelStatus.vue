@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import { useRouter } from 'vue-router'
 import { useSpelStore } from '@/stores/spelStore'
 
 const store = useSpelStore()
+const router = useRouter()
 
 const onopgelostGroepen = computed(() =>
   store.puzzelData.groepen.filter((g) => !store.opgelostGroepIds.includes(g.id)),
@@ -14,7 +16,7 @@ const onopgelostGroepen = computed(() =>
     <div v-if="store.spelStatus === 'gewonnen'" class="status-kaart status-kaart--gewonnen">
       <h2>Gefeliciteerd!</h2>
       <p>Je hebt alle woordgroepen gevonden.</p>
-      <button class="opnieuw-knop" @click="store.resetSpel()">Opnieuw spelen</button>
+      <button class="opnieuw-knop" @click="router.push('/')">Terug naar startscherm</button>
     </div>
 
     <div v-else class="status-kaart status-kaart--verloren">
@@ -22,9 +24,9 @@ const onopgelostGroepen = computed(() =>
       <p>Je hebt 3 foute pogingen gemaakt.</p>
       <p v-if="onopgelostGroepen.length > 0" class="onopgelost-label">
         Niet gevonden:
-        <strong>{{ onopgelostGroepen.map((g) => g.label).join(', ') }}</strong>
+        <strong>{{ onopgelostGroepen.map((g) => g.id).join(', ') }}</strong>
       </p>
-      <button class="opnieuw-knop" @click="store.resetSpel()">Opnieuw spelen</button>
+      <button class="opnieuw-knop" @click="router.push('/')">Terug naar startscherm</button>
     </div>
   </div>
 </template>

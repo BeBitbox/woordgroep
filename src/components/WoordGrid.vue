@@ -1,11 +1,10 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useSpelStore } from '@/stores/spelStore'
-import type { Woord } from '@/types/spel'
 
 const store = useSpelStore()
 
-function shuffle(woorden: Woord[]): Woord[] {
+function shuffle(woorden: string[]): string[] {
   const arr = [...woorden]
   for (let i = arr.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1))
@@ -16,10 +15,11 @@ function shuffle(woorden: Woord[]): Woord[] {
   return arr
 }
 
-const geschudeWoorden = ref<Woord[]>(shuffle(store.puzzelData.woorden))
+const alleWoorden = store.puzzelData.groepen.flatMap((g) => g.woorden)
+const geschudeWoorden = ref<string[]>(shuffle(alleWoorden))
 
-function groepKleur(groepId: string): string {
-  const groep = store.puzzelData.groepen.find((g) => g.id === groepId)
+function groepKleur(woord: string): string {
+  const groep = store.puzzelData.groepen.find((g) => g.woorden.includes(woord))
   return groep?.kleur ?? '#16a34a'
 }
 </script>
@@ -28,17 +28,17 @@ function groepKleur(groepId: string): string {
   <div class="woord-grid">
     <button
       v-for="woord in geschudeWoorden"
-      :key="woord.id"
+      :key="woord"
       class="woord-vak"
       :class="{
-        'woord-vak--geselecteerd': store.isGeselecteerd(woord.id),
-        'woord-vak--opgelost': store.isOpgelost(woord.id),
+        'woord-vak--geselecteerd': store.isGeselecteerd(woord),
+        'woord-vak--opgelost': store.isOpgelost(woord),
       }"
-      :style="store.isOpgelost(woord.id) ? { backgroundColor: groepKleur(woord.groepId) } : {}"
-      :disabled="store.isOpgelost(woord.id) || store.spelStatus !== 'bezig'"
-      @click="store.selecteerWoord(woord.id)"
+      :style="store.isOpgelost(woord) ? { backgroundColor: groepKleur(woord) } : {}"
+      :disabled="store.isOpgelost(woord) || store.spelStatus !== 'bezig'"
+      @click="store.selecteerWoord(woord)"
     >
-      {{ woord.tekst }}
+      {{ woord }}
     </button>
   </div>
 </template>

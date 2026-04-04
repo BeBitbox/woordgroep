@@ -5,7 +5,7 @@ import { useSpelStore } from '@/stores/spelStore'
 const store = useSpelStore()
 
 const kanBevestigen = computed(
-  () => store.geselecteerdeIds.length === 4 && store.spelStatus === 'bezig',
+  () => store.geselecteerdeWoorden.length === 4 && store.spelStatus === 'bezig',
 )
 </script>
 
@@ -20,9 +20,11 @@ const kanBevestigen = computed(
       >
         ♥
       </span>
-      <span class="pogingen-label">{{ store.resterendePogingen }} poging(en) over</span>
+      <span class="pogingen-label"
+        >{{ store.resterendePogingen }} <span v-if="store.resterendePogingen > 1">pogingen</span
+        ><span v-else>poging</span> over</span
+      >
     </div>
-
     <button class="bevestig-knop" :disabled="!kanBevestigen" @click="store.bevestigKeuze()">
       Bevestig keuze
     </button>

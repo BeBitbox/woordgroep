@@ -1,76 +1,85 @@
-import { describe, it, expect, beforeEach } from 'vitest'
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { setActivePinia, createPinia } from 'pinia'
 import { useSpelStore } from '../stores/spelStore'
-import puzzel001 from '../data/puzzel001'
+import { allePuzzels } from '@/data'
 
 beforeEach(() => {
+  vi.useFakeTimers()
+  localStorage.clear()
   setActivePinia(createPinia())
 })
 
+afterEach(() => {
+  vi.useRealTimers()
+})
+
 describe('spelStore — selecteerWoord', () => {
-  it('voegt een woord toe aan geselecteerdeIds', () => {
+  it('voegt een woord toe aan geselecteerdeWoorden', () => {
     const store = useSpelStore()
-    store.selecteerWoord('w01')
-    expect(store.geselecteerdeIds).toContain('w01')
+    store.initialiseerSpel('gemakkelijk')
+    store.selecteerWoord('Appel')
+    expect(store.geselecteerdeWoorden).toContain('Appel')
   })
 
   it('deselecteert een al geselecteerd woord', () => {
     const store = useSpelStore()
-    store.selecteerWoord('w01')
-    store.selecteerWoord('w01')
-    expect(store.geselecteerdeIds).not.toContain('w01')
+    store.initialiseerSpel('gemakkelijk')
+    store.selecteerWoord('Appel')
+    store.selecteerWoord('Appel')
+    expect(store.geselecteerdeWoorden).not.toContain('Appel')
   })
 
   it('selecteert maximaal 4 woorden; een vijfde heeft geen effect', () => {
     const store = useSpelStore()
-    store.selecteerWoord('w01')
-    store.selecteerWoord('w02')
-    store.selecteerWoord('w03')
-    store.selecteerWoord('w04')
-    store.selecteerWoord('w05')
-    expect(store.geselecteerdeIds).toHaveLength(4)
-    expect(store.geselecteerdeIds).not.toContain('w05')
+    store.initialiseerSpel('gemakkelijk')
+    store.selecteerWoord('Appel')
+    store.selecteerWoord('Banaan')
+    store.selecteerWoord('Mango')
+    store.selecteerWoord('Peer')
+    store.selecteerWoord('Leeuw')
+    expect(store.geselecteerdeWoorden).toHaveLength(4)
+    expect(store.geselecteerdeWoorden).not.toContain('Leeuw')
   })
 
   it('doet niets als spelStatus niet bezig is', () => {
     const store = useSpelStore()
+    store.initialiseerSpel('gemakkelijk')
     store.spelStatus = 'verloren'
-    store.selecteerWoord('w01')
-    expect(store.geselecteerdeIds).toHaveLength(0)
+    store.selecteerWoord('Appel')
+    expect(store.geselecteerdeWoorden).toHaveLength(0)
   })
 })
 
 describe('spelStore — bevestigKeuze', () => {
   it('markeert een correcte groep als opgelost en leegt de selectie', () => {
     const store = useSpelStore()
-    const groepId = puzzel001.groepen[0]!.id
-    const woordenVanGroep = puzzel001.woorden.filter((w) => w.groepId === groepId).slice(0, 4)
-    woordenVanGroep.forEach((w) => store.selecteerWoord(w.id))
+    store.initialiseerSpel('gemakkelijk')
+    const groep = allePuzzels[0]!.groepen[0]!
+    groep.woorden.forEach((w) => store.selecteerWoord(w))
     store.bevestigKeuze()
-    expect(store.opgelostGroepIds).toContain(groepId)
-    expect(store.geselecteerdeIds).toHaveLength(0)
+    expect(store.opgelostGroepIds).toContain(groep.id)
+    expect(store.geselecteerdeWoorden).toHaveLength(0)
   })
 
   it('verhoogt foutePogingen bij een foute keuze en leegt de selectie', () => {
     const store = useSpelStore()
-    // Selecteer woorden van verschillende groepen
-    const ids = puzzel001.groepen
-      .flatMap((g) => puzzel001.woorden.find((w) => w.groepId === g.id))
-      .map((w) => w!.id)
-    ids.slice(0, 4).forEach((id) => store.selecteerWoord(id))
+    store.initialiseerSpel('gemakkelijk')
+    // Selecteer één woord per groep (gemengde selectie)
+    const foutSelectie = allePuzzels[0]!.groepen.map((g) => g.woorden[0]!)
+    foutSelectie.slice(0, 4).forEach((w) => store.selecteerWoord(w))
     store.bevestigKeuze()
     expect(store.foutePogingen).toBe(1)
-    expect(store.geselecteerdeIds).toHaveLength(0)
+    expect(store.geselecteerdeWoorden).toHaveLength(0)
   })
 
   it('zet spelStatus op verloren na 3 foute pogingen', () => {
     const store = useSpelStore()
+    store.initialiseerSpel('gemakkelijk')
     const foutSelectie = () => {
-      const ids = puzzel001.groepen
-        .flatMap((g) => puzzel001.woorden.find((w) => w.groepId === g.id))
-        .map((w) => w!.id)
-      ids.slice(0, 4).forEach((id) => store.selecteerWoord(id))
+      const woorden = allePuzzels[0]!.groepen.map((g) => g.woorden[0]!)
+      woorden.slice(0, 4).forEach((w) => store.selecteerWoord(w))
       store.bevestigKeuze()
+      vi.runAllTimers()
     }
     foutSelectie()
     foutSelectie()
@@ -80,22 +89,24 @@ describe('spelStore — bevestigKeuze', () => {
 
   it('zet spelStatus op gewonnen na 4 correct gevonden groepen', () => {
     const store = useSpelStore()
-    for (const groep of puzzel001.groepen) {
-      const woorden = puzzel001.woorden.filter((w) => w.groepId === groep.id)
-      woorden.forEach((w) => store.selecteerWoord(w.id))
+    store.initialiseerSpel('gemakkelijk')
+    for (const groep of allePuzzels[0]!.groepen) {
+      groep.woorden.forEach((w) => store.selecteerWoord(w))
       store.bevestigKeuze()
+      vi.runAllTimers()
     }
     expect(store.spelStatus).toBe('gewonnen')
   })
 
   it('lost de laatste groep automatisch op na 3 correcte groepen', () => {
     const store = useSpelStore()
-    const eersteDeGroepen = puzzel001.groepen.slice(0, 3)
-    const laatste = puzzel001.groepen[3]!
+    store.initialiseerSpel('gemakkelijk')
+    const eersteDeGroepen = allePuzzels[0]!.groepen.slice(0, 3)
+    const laatste = allePuzzels[0]!.groepen[3]!
     for (const groep of eersteDeGroepen) {
-      const woorden = puzzel001.woorden.filter((w) => w.groepId === groep.id)
-      woorden.forEach((w) => store.selecteerWoord(w.id))
+      groep.woorden.forEach((w) => store.selecteerWoord(w))
       store.bevestigKeuze()
+      vi.runAllTimers()
     }
     expect(store.opgelostGroepIds).toContain(laatste.id)
     expect(store.spelStatus).toBe('gewonnen')
@@ -105,11 +116,12 @@ describe('spelStore — bevestigKeuze', () => {
 describe('spelStore — resetSpel', () => {
   it('herstelt alle state naar beginwaarden', () => {
     const store = useSpelStore()
-    store.selecteerWoord('w01')
+    store.initialiseerSpel('gemakkelijk')
+    store.selecteerWoord('Appel')
     store.foutePogingen = 2
     store.spelStatus = 'verloren'
     store.resetSpel()
-    expect(store.geselecteerdeIds).toHaveLength(0)
+    expect(store.geselecteerdeWoorden).toHaveLength(0)
     expect(store.opgelostGroepIds).toHaveLength(0)
     expect(store.foutePogingen).toBe(0)
     expect(store.spelStatus).toBe('bezig')
@@ -119,13 +131,15 @@ describe('spelStore — resetSpel', () => {
 describe('spelStore — getters', () => {
   it('isGeselecteerd geeft true terug voor geselecteerde woorden', () => {
     const store = useSpelStore()
-    store.selecteerWoord('w01')
-    expect(store.isGeselecteerd('w01')).toBe(true)
-    expect(store.isGeselecteerd('w02')).toBe(false)
+    store.initialiseerSpel('gemakkelijk')
+    store.selecteerWoord('Appel')
+    expect(store.isGeselecteerd('Appel')).toBe(true)
+    expect(store.isGeselecteerd('Banaan')).toBe(false)
   })
 
   it('resterendePogingen telt correct af', () => {
     const store = useSpelStore()
+    store.initialiseerSpel('gemakkelijk')
     expect(store.resterendePogingen).toBe(3)
     store.foutePogingen = 1
     expect(store.resterendePogingen).toBe(2)

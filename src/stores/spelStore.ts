@@ -1,9 +1,10 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
-import type { PuzzelData } from '@/types/spel'
-import { allePuzzels } from '@/data/index'
+import type { Moeilijkheid, PuzzelData } from '@/types/spel'
+import type { MoeilijkheidLower } from '@/stores/stats'
+import { allePuzzels } from '@/data'
 
-const STORAGE_KEY = 'woordgroep-dagelijks'
+const STORAGE_KEY_PREFIX = 'woordgroep-dagelijks'
 
 interface OpgeslagenVoortgang {
   datum: string
@@ -17,17 +18,25 @@ function vandaagDatum(): string {
   return `${nu.getFullYear()}-${String(nu.getMonth() + 1).padStart(2, '0')}-${String(nu.getDate()).padStart(2, '0')}`
 }
 
-function dagelijksPuzzelIndex(): number {
-  const epoch = new Date('2024-01-01').getTime()
-  const vandaag = new Date()
-  vandaag.setHours(0, 0, 0, 0)
-  const dagNummer = Math.floor((vandaag.getTime() - epoch) / (1000 * 60 * 60 * 24))
-  return ((dagNummer % allePuzzels.length) + allePuzzels.length) % allePuzzels.length
+function moeilijkheidNaarType(m: MoeilijkheidLower): Moeilijkheid {
+  return (m.charAt(0).toUpperCase() + m.slice(1)) as Moeilijkheid
 }
 
-function laadVoortgang(datum: string): OpgeslagenVoortgang | null {
+function dagelijksPuzzelVoor(moeilijkheid: Moeilijkheid): PuzzelData {
+  //TODO vervang dag door huidige dag van datum
+  const dag = 1
+  const gefilterd = allePuzzels.filter((p) => p.dag === dag && p.moeilijkheid === moeilijkheid)
+  if (gefilterd.length === 0) return allePuzzels[0]!
+  return gefilterd[0]!
+}
+
+function storageKey(moeilijkheid: string): string {
+  return `${STORAGE_KEY_PREFIX}-${moeilijkheid}`
+}
+
+function _laadVoortgang(datum: string, moeilijkheid: string): OpgeslagenVoortgang | null {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY)
+    const raw = localStorage.getItem(storageKey(moeilijkheid))
     if (!raw) return null
     const parsed: OpgeslagenVoortgang = JSON.parse(raw)
     return parsed.datum === datum ? parsed : null
@@ -36,24 +45,24 @@ function laadVoortgang(datum: string): OpgeslagenVoortgang | null {
   }
 }
 
-function slaVoortgangOp(voortgang: OpgeslagenVoortgang): void {
+function slaVoortgangOp(voortgang: OpgeslagenVoortgang, moeilijkheid: string): void {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(voortgang))
+    localStorage.setItem(storageKey(moeilijkheid), JSON.stringify(voortgang))
   } catch {
-    // localStorage niet beschikbaar (bijv. privémodus)
+    console.error("Local storage niet beschikbaar")
   }
 }
 
 export const useSpelStore = defineStore('spel', () => {
   const datum = vandaagDatum()
-  const puzzelIndex = dagelijksPuzzelIndex()
-  const opgeslagen = laadVoortgang(datum)
+  const huidigeMoeilijkheid = ref<MoeilijkheidLower>('gemakkelijk')
 
-  const puzzelData = ref<PuzzelData>(allePuzzels[puzzelIndex]!)
-  const geselecteerdeIds = ref<string[]>([])
-  const opgelostGroepIds = ref<string[]>(opgeslagen?.opgelostGroepIds ?? [])
-  const foutePogingen = ref(opgeslagen?.foutePogingen ?? 0)
-  const spelStatus = ref<'bezig' | 'gewonnen' | 'verloren'>(opgeslagen?.spelStatus ?? 'bezig')
+  const puzzelData = ref<PuzzelData>(dagelijksPuzzelVoor(moeilijkheidNaarType(huidigeMoeilijkheid.value)))
+  const geselecteerdeWoorden = ref<string[]>([])
+  const opgelostGroepIds = ref<string[]>([])
+  const foutePogingen = ref(0)
+  const spelStatus = ref<'bezig' | 'gewonnen' | 'verloren'>('bezig')
+  const feedback = ref<{ type: 'correct'; groepId: string } | { type: 'fout' } | null>(null)
 
   const resterendePogingen = computed(() => 3 - foutePogingen.value)
 
@@ -71,53 +80,76 @@ export const useSpelStore = defineStore('spel', () => {
     })
   })
 
-  function isGeselecteerd(id: string): boolean {
-    return geselecteerdeIds.value.includes(id)
+  function isGeselecteerd(woord: string): boolean {
+    return geselecteerdeWoorden.value.includes(woord)
   }
 
-  function isOpgelost(id: string): boolean {
-    const woord = puzzelData.value.woorden.find((w) => w.id === id)
-    if (!woord) return false
-    return opgelostGroepIds.value.includes(woord.groepId)
+  function isOpgelost(woord: string): boolean {
+    const groep = puzzelData.value.groepen.find((g) => g.woorden.includes(woord))
+    if (!groep) return false
+    return opgelostGroepIds.value.includes(groep.id)
   }
 
-  function selecteerWoord(id: string): void {
+  function selecteerWoord(woord: string): void {
     if (spelStatus.value !== 'bezig') return
+    if (feedback.value !== null) return
 
-    const index = geselecteerdeIds.value.indexOf(id)
+    const index = geselecteerdeWoorden.value.indexOf(woord)
     if (index !== -1) {
-      geselecteerdeIds.value.splice(index, 1)
+      geselecteerdeWoorden.value.splice(index, 1)
       return
     }
 
-    if (geselecteerdeIds.value.length < 4) {
-      geselecteerdeIds.value.push(id)
+    if (geselecteerdeWoorden.value.length < 4) {
+      geselecteerdeWoorden.value.push(woord)
     }
   }
 
   function _slaOp(): void {
-    slaVoortgangOp({
-      datum,
-      spelStatus: spelStatus.value,
-      opgelostGroepIds: opgelostGroepIds.value,
-      foutePogingen: foutePogingen.value,
-    })
+    slaVoortgangOp(
+      {
+        datum,
+        spelStatus: spelStatus.value,
+        opgelostGroepIds: opgelostGroepIds.value,
+        foutePogingen: foutePogingen.value,
+      },
+      huidigeMoeilijkheid.value,
+    )
+  }
+
+  function initialiseerSpel(moeilijkheid: MoeilijkheidLower): void {
+    huidigeMoeilijkheid.value = moeilijkheid
+    const moeilijkheidType = moeilijkheidNaarType(moeilijkheid)
+    const herstel = _laadVoortgang(datum, moeilijkheid)
+
+    puzzelData.value = dagelijksPuzzelVoor(moeilijkheidType)
+    geselecteerdeWoorden.value = []
+    opgelostGroepIds.value = herstel?.opgelostGroepIds ?? []
+    foutePogingen.value = herstel?.foutePogingen ?? 0
+    spelStatus.value = herstel?.spelStatus ?? 'bezig'
+    _slaOp()
   }
 
   function bevestigKeuze(): void {
-    if (geselecteerdeIds.value.length !== 4) return
+    if (geselecteerdeWoorden.value.length !== 4) return
     if (spelStatus.value !== 'bezig') return
+    if (feedback.value !== null) return
 
-    const groepIds = geselecteerdeIds.value.map((id) => {
-      const woord = puzzelData.value.woorden.find((w) => w.id === id)
-      return woord?.groepId
-    })
+    const groepen = geselecteerdeWoorden.value.map((woord) =>
+      puzzelData.value.groepen.find((g) => g.woorden.includes(woord)),
+    )
 
-    const alleZelfdeGroep = groepIds.every((gid) => gid === groepIds[0])
+    const alleZelfdeGroep = groepen.every((g) => g?.id === groepen[0]?.id)
 
-    if (alleZelfdeGroep && groepIds[0]) {
-      opgelostGroepIds.value.push(groepIds[0])
-      geselecteerdeIds.value = []
+    if (alleZelfdeGroep && groepen[0]) {
+      const opgelostGroepId = groepen[0].id
+      feedback.value = { type: 'correct', groepId: opgelostGroepId }
+      setTimeout(() => {
+        feedback.value = null
+      }, 1200)
+
+      opgelostGroepIds.value.push(opgelostGroepId)
+      geselecteerdeWoorden.value = []
 
       const totaalGroepen = puzzelData.value.groepen.length
       if (opgelostGroepIds.value.length === totaalGroepen - 1) {
@@ -130,8 +162,13 @@ export const useSpelStore = defineStore('spel', () => {
         spelStatus.value = 'gewonnen'
       }
     } else {
+      feedback.value = { type: 'fout' }
+      setTimeout(() => {
+        feedback.value = null
+      }, 500)
+
       foutePogingen.value++
-      geselecteerdeIds.value = []
+      geselecteerdeWoorden.value = []
 
       if (foutePogingen.value >= 3) {
         spelStatus.value = 'verloren'
@@ -142,7 +179,7 @@ export const useSpelStore = defineStore('spel', () => {
   }
 
   function resetSpel(): void {
-    geselecteerdeIds.value = []
+    geselecteerdeWoorden.value = []
     opgelostGroepIds.value = []
     foutePogingen.value = 0
     spelStatus.value = 'bezig'
@@ -150,10 +187,12 @@ export const useSpelStore = defineStore('spel', () => {
 
   return {
     puzzelData,
-    geselecteerdeIds,
+    huidigeMoeilijkheid,
+    geselecteerdeWoorden,
     opgelostGroepIds,
     foutePogingen,
     spelStatus,
+    feedback,
     resterendePogingen,
     vandaagGespeeld,
     puzzelDatum,
@@ -162,5 +201,6 @@ export const useSpelStore = defineStore('spel', () => {
     selecteerWoord,
     bevestigKeuze,
     resetSpel,
+    initialiseerSpel,
   }
 })

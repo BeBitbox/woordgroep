@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import StartschermView from '@/views/StartschermView.vue'
 import SpelView from '@/views/SpelView.vue'
 
 const router = createRouter({
@@ -6,6 +7,10 @@ const router = createRouter({
   routes: [
     {
       path: '/',
+      component: StartschermView,
+    },
+    {
+      path: '/spel/:moeilijkheid',
       component: SpelView,
     },
   ],
