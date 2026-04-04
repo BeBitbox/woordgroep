@@ -5,6 +5,7 @@ import { allePuzzels } from '@/data'
 
 beforeEach(() => {
   vi.useFakeTimers()
+  vi.setSystemTime(new Date(2026, 0, 1)) // dag 1 → puzzel dag=1 wordt geladen
   localStorage.clear()
   setActivePinia(createPinia())
 })

@@ -52,7 +52,7 @@ watch(
           :class="store.feedback.type === 'correct' ? 'feedback-toast--correct' : 'feedback-toast--fout'"
         >
           <template v-if="store.feedback.type === 'correct'">
-            🎉 {{ store.feedback.groepId }}" 🎉
+            🎉 {{ store.feedback.groepId }} 🎉
           </template>
           <template v-else>&#10060;</template>
         </div>

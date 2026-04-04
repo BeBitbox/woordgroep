@@ -23,8 +23,7 @@ function moeilijkheidNaarType(m: MoeilijkheidLower): Moeilijkheid {
 }
 
 function dagelijksPuzzelVoor(moeilijkheid: Moeilijkheid): PuzzelData {
-  //TODO vervang dag door huidige dag van datum
-  const dag = 1
+  const dag = new Date().getDate()
   const gefilterd = allePuzzels.filter((p) => p.dag === dag && p.moeilijkheid === moeilijkheid)
   if (gefilterd.length === 0) return allePuzzels[0]!
   return gefilterd[0]!

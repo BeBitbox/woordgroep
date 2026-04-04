@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest'
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
 import { setActivePinia, createPinia } from 'pinia'
 import WoordGrid from '../components/WoordGrid.vue'
@@ -6,8 +6,14 @@ import { useSpelStore } from '../stores/spelStore'
 import { allePuzzels} from '@/data'
 
 beforeEach(() => {
+  vi.useFakeTimers()
+  vi.setSystemTime(new Date(2026, 0, 1)) // dag 1 → puzzel dag=1 wordt geladen
   localStorage.clear()
   setActivePinia(createPinia())
+})
+
+afterEach(() => {
+  vi.useRealTimers()
 })
 
 describe('WoordGrid', () => {

@@ -1,73 +1,99 @@
-# woordgroep
+# Woordgroep
 
-This template should help get you started developing with Vue 3 in Vite.
+Een dagelijks woordspel in het Nederlands. Vind de vier groepen van vier woorden die bij elkaar horen — elke moeilijkheidsgraad één keer per dag.
 
-## Recommended IDE Setup
+![Vue 3](https://img.shields.io/badge/Vue-3.x-4FC08D?logo=vue.js&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-6.x-3178C6?logo=typescript&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-8.x-646CFF?logo=vite&logoColor=white)
+![Playwright](https://img.shields.io/badge/getest_met-Playwright-2EAD33?logo=playwright&logoColor=white)
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+---
 
-## Recommended Browser Setup
+## Hoe werkt het?
 
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
+Je ziet een 4×4-grid van 16 woorden. Jouw taak: vind de vier groepen van vier woorden die een gemeenschappelijk thema hebben. Je hebt **drie pogingen** voordat het spel voorbij is.
 
-## Type Support for `.vue` Imports in TS
+Er zijn drie moeilijkheidsgraden — **Gemakkelijk**, **Gemiddeld** en **Moeilijk** — elk met een eigen dagelijkse puzzel. De puzzels wisselen automatisch per dag.
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+---
 
-## Customize configuration
+## Technische stack
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+| Laag       | Technologie                                |
+|------------|--------------------------------------------|
+| Framework  | Vue 3 met `<script setup>` Composition API |
+| State      | Pinia (setup stores)                       |
+| Routing    | Vue Router 5                               |
+| Build      | Vite 8                                     |
+| Taal       | TypeScript 6 (strict mode)                 |
+| Unit tests | Vitest + `@vue/test-utils`                 |
+| E2E tests  | Playwright (Chromium, Firefox, WebKit)     |
+| Linting    | oxlint + ESLint + Prettier                 |
+| Hosting    | AWS S3 + CloudFront                        |
 
-## Project Setup
+---
+
+## Lokaal draaien
 
 ```sh
+# Afhankelijkheden installeren
 npm install
-```
 
-### Compile and Hot-Reload for Development
-
-```sh
+# Development server met hot-reload
 npm run dev
 ```
 
-### Type-Check, Compile and Minify for Production
+Open [http://localhost:5173](http://localhost:5173) in je browser.
+
+---
+
+## Commando's
 
 ```sh
-npm run build
+npm run dev          # Development server
+npm run build        # Type-check + productie build
+npm run test:unit    # Unit tests (Vitest)
+npm run test:e2e     # End-to-end tests (Playwright)
+npm run lint         # oxlint + ESLint (met --fix)
+npm run format       # Prettier formattering
 ```
 
-### Run Unit Tests with [Vitest](https://vitest.dev/)
+### E2E tests
 
 ```sh
-npm run test:unit
-```
-
-### Run End-to-End Tests with [Playwright](https://playwright.dev)
-
-```sh
-# Install browsers for the first run
+# Eenmalig: browsers installeren
 npx playwright install
 
-# When testing on CI, must build the project first
+# Eerst bouwen, dan testen
 npm run build
-
-# Runs the end-to-end tests
 npm run test:e2e
-# Runs the tests only on Chromium
+
+# Alleen Chromium
 npm run test:e2e -- --project=chromium
-# Runs the tests of a specific file
-npm run test:e2e -- tests/example.spec.ts
-# Runs the tests in debug mode
+
+# Met visuele browser (debug)
 npm run test:e2e -- --debug
 ```
 
-### Lint with [ESLint](https://eslint.org/)
+---
 
-```sh
-npm run lint
+## Projectstructuur
+
 ```
+src/
+├── components/       # WoordGrid, CookieBanner, SpelBesturing, SpelStatus
+├── views/            # StartschermView, SpelView
+├── stores/           # spelStore, stats, cookieConsent (Pinia)
+├── data/             # Dagelijkse puzzels
+├── types/            # TypeScript-interfaces
+└── router/           # Vue Router-configuratie
+
+e2e/                  # Playwright end-to-end tests
+```
+
+---
+
+## Deployment
+
+De applicatie wordt automatisch gebouwd en gedeployed via GitHub Actions bij elke push naar `master`. De statische build (`dist/`) wordt gesynchroniseerd naar een AWS S3-bucket en geserveerd via
+CloudFront.
