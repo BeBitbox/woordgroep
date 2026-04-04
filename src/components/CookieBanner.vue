@@ -10,7 +10,8 @@ const store = useCookieConsentStore()
       <h2 id="cookie-titel" class="banner-titel">Cookiebeleid</h2>
       <p class="banner-uitleg">
         <strong>Woordgroep</strong> maakt gebruik van cookies om jouw spelervaring bij te houden.
-        Lees hieronder welke cookies we gebruiken en maak je keuze.
+        Lees hieronder welke cookies we gebruiken en maak je keuze. Meer info in ons
+        <RouterLink to="/privacybeleid" class="privacy-link">privacybeleid</RouterLink>.
       </p>
 
       <div class="cookie-sectie">
@@ -87,6 +88,11 @@ const store = useCookieConsentStore()
   color: #6b7280;
   margin-bottom: 1.25rem;
   line-height: 1.5;
+}
+
+.privacy-link {
+  color: #2563eb;
+  text-decoration: underline;
 }
 
 .cookie-sectie {

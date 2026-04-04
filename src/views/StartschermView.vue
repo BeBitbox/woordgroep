@@ -53,6 +53,8 @@ function startSpel(moeilijkheid: MoeilijkheidLower): void {
         </div>
       </div>
     </div>
+<!-- TODO -->
+<!--    <AdSenseBlok />-->
   </main>
 </template>
 

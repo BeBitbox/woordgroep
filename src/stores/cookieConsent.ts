@@ -1,5 +1,17 @@
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { defineStore } from 'pinia'
+
+const ADSENSE_PUBLISHER_ID = 'ca-pub-XXXXXXXXXX'
+
+function laadAdSenseScript(): void {
+  if (document.getElementById('adsense-script')) return
+  const script = document.createElement('script')
+  script.id = 'adsense-script'
+  script.async = true
+  script.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_PUBLISHER_ID}`
+  script.crossOrigin = 'anonymous'
+  document.head.appendChild(script)
+}
 
 const COOKIE_NAAM = 'woordgroep-consent'
 
@@ -44,5 +56,10 @@ export const useCookieConsentStore = defineStore('cookieConsent', () => {
     schrijfCookie(COOKIE_NAAM, encodeURIComponent(JSON.stringify(data)), 365)
   }
 
+  // TODO Laad AdSense zodra toestemming gegeven wordt (ook bij herstel na paginalading)
+ /* watch(adsenseAccepted, (gegeven) => {
+    if (gegeven) laadAdSenseScript()
+  })
+*/
   return { consentGiven, functionalAccepted, adsenseAccepted, loadConsent, saveConsent }
 })
