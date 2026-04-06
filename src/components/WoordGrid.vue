@@ -49,12 +49,13 @@ function groepKleur(woord: string): string {
   grid-template-columns: repeat(4, 1fr);
   gap: 0.5rem;
   max-width: 600px;
+  width: 100%;
   margin: 0 auto;
 }
 
 .woord-vak {
-  padding: 1rem 0.5rem;
-  font-size: 0.95rem;
+  padding: 0.875rem 0.375rem;
+  font-size: clamp(0.7rem, 2.2vw, 0.95rem);
   font-weight: 600;
   font-family: inherit;
   text-align: center;
@@ -68,7 +69,11 @@ function groepKleur(woord: string): string {
     border-color 0.15s ease,
     transform 0.1s ease;
   min-height: 3.5rem;
-  line-height: 1.3;
+  line-height: 1.25;
+  /* Lange woorden wrapppen binnen de cel */
+  overflow-wrap: break-word;
+  word-break: break-word;
+  hyphens: auto;
 }
 
 .woord-vak:hover:not(:disabled) {
@@ -96,9 +101,13 @@ function groepKleur(woord: string): string {
 }
 
 @media (max-width: 480px) {
+  .woord-grid {
+    gap: 0.375rem;
+  }
+
   .woord-vak {
-    font-size: 0.8rem;
-    padding: 0.75rem 0.25rem;
+    padding: 0.625rem 0.25rem;
+    min-height: 3rem;
   }
 }
 </style>

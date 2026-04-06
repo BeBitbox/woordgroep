@@ -67,7 +67,13 @@ watch(
 .spel-view {
   max-width: 640px;
   margin: 0 auto;
-  padding: 2rem 1.25rem;
+  padding: 2rem 1rem;
+}
+
+@media (max-width: 480px) {
+  .spel-view {
+    padding: 1.25rem 0.625rem;
+  }
 }
 
 .spel-titel {
