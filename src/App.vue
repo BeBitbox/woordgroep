@@ -17,10 +17,11 @@ const cookieConsentActief = import.meta.env.VITE_COOKIE_CONSENT_ACTIEF !== 'fals
   <CookieBanner v-if="cookieConsentActief && !consentStore.consentGiven" />
   <template v-if="!cookieConsentActief || consentStore.consentGiven">
     <header class="site-header">
-      <RouterLink to="/" class="header-logo" aria-label="Terug naar startscherm">
-        <span class="logo-letter" aria-hidden="true">W</span>oordgroep
-      </RouterLink>
-      <div class="header-rechts">
+      <div class="header-inhoud">
+        <RouterLink to="/" class="header-logo" aria-label="Terug naar startscherm">
+          <span class="logo-letter" aria-hidden="true">W</span>oordgroep
+        </RouterLink>
+        <div class="header-rechts">
         <button
           class="info-knop"
           aria-label="Speluitleg bekijken"
@@ -44,6 +45,7 @@ const cookieConsentActief = import.meta.env.VITE_COOKIE_CONSENT_ACTIEF !== 'fals
           </svg>
         </button>
         <ThemeToggle />
+        </div>
       </div>
     </header>
 
@@ -56,16 +58,21 @@ const cookieConsentActief = import.meta.env.VITE_COOKIE_CONSENT_ACTIEF !== 'fals
 
 <style scoped>
 .site-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0.75rem 1.25rem;
   border-bottom: 1px solid var(--rand);
   background-color: var(--bg-pagina);
   transition: background-color 0.25s ease;
   position: sticky;
   top: 0;
   z-index: 100;
+}
+
+.header-inhoud {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 0.75rem 1rem;
 }
 
 .header-rechts {
