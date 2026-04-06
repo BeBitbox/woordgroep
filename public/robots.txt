@@ -1,5 +1,4 @@
 User-agent: *
 Allow: /
-Disallow: /spel/
 
 Sitemap: https://woordgroep.site/sitemap.xml
