@@ -73,17 +73,17 @@ const router = useRouter()
 .juridisch-pagina {
   max-width: 720px;
   margin: 0 auto;
-  padding: 2rem 1rem 4rem;
-  font-family: sans-serif;
-  color: #111827;
+  padding: 2rem 1.25rem 4rem;
+  color: var(--tekst-primair);
   line-height: 1.7;
 }
 
 .terug-knop {
   background: none;
   border: none;
-  color: #2563eb;
+  color: var(--tekst-link);
   font-size: 0.95rem;
+  font-family: inherit;
   cursor: pointer;
   padding: 0;
   margin-bottom: 1.5rem;
@@ -98,10 +98,11 @@ h1 {
   font-size: 2rem;
   font-weight: 700;
   margin-bottom: 0.25rem;
+  color: var(--tekst-primair);
 }
 
 .datum {
-  color: #6b7280;
+  color: var(--tekst-gedempt);
   font-size: 0.875rem;
   margin-bottom: 2rem;
 }
@@ -111,14 +112,18 @@ section {
 }
 
 h2 {
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   font-weight: 700;
   margin-bottom: 0.5rem;
-  color: #1f2937;
+  color: var(--tekst-primair);
+}
+
+p {
+  color: var(--tekst-secundair);
 }
 
 a {
-  color: #2563eb;
+  color: var(--tekst-link);
   text-decoration: underline;
 }
 </style>

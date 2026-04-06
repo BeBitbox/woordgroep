@@ -2,7 +2,18 @@
 <html lang="nl">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <!-- Vroege thema-detectie: voorkomt witte flits bij donker thema -->
+    <script>
+      ;(function () {
+        var opgeslagen = localStorage.getItem('woordgroep-thema')
+        var voorkeur =
+          window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+            ? 'dark'
+            : 'light'
+        document.documentElement.setAttribute('data-theme', opgeslagen || voorkeur)
+      })()
+    </script>
     <title>Woordgroep — Dagelijks woordspel</title>
     <meta
       name="description"

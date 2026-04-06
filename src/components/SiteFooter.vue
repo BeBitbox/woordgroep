@@ -11,16 +11,17 @@
   text-align: center;
   padding: 1.5rem 1rem;
   font-size: 0.8rem;
-  color: #9ca3af;
+  color: var(--footer-tekst);
 }
 
 .site-footer a {
-  color: #9ca3af;
+  color: var(--footer-tekst);
   text-decoration: none;
+  transition: color 0.15s ease;
 }
 
 .site-footer a:hover {
-  color: #6b7280;
+  color: var(--footer-tekst-hover);
   text-decoration: underline;
 }
 

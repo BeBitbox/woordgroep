@@ -17,13 +17,16 @@ const kanBevestigen = computed(
         :key="n"
         class="hart"
         :class="{ 'hart--weg': n > store.resterendePogingen }"
+        aria-hidden="true"
       >
         ♥
       </span>
-      <span class="pogingen-label"
-        >{{ store.resterendePogingen }} <span v-if="store.resterendePogingen > 1">pogingen</span
-        ><span v-else>poging</span> over</span
-      >
+      <span class="pogingen-label">
+        {{ store.resterendePogingen }}
+        <span v-if="store.resterendePogingen !== 1">pogingen</span>
+        <span v-else>poging</span>
+        over
+      </span>
     </div>
     <button class="bevestig-knop" :disabled="!kanBevestigen" @click="store.bevestigKeuze()">
       Bevestig keuze
@@ -37,50 +40,61 @@ const kanBevestigen = computed(
   flex-direction: column;
   align-items: center;
   gap: 1rem;
-  margin: 1rem 0;
+  margin: 1.25rem 0;
 }
 
 .pogingen {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  font-size: 1.25rem;
+  gap: 0.4rem;
 }
 
 .hart {
-  color: #dc2626;
-  font-size: 1.5rem;
-  transition: opacity 0.2s;
+  color: var(--hart-actief);
+  font-size: 1.375rem;
+  transition:
+    color 0.2s ease,
+    opacity 0.2s ease;
+  line-height: 1;
 }
 
 .hart--weg {
-  color: #d1d5db;
+  color: var(--hart-inactief);
+  opacity: 0.6;
 }
 
 .pogingen-label {
-  font-size: 0.875rem;
-  color: #6b7280;
-  margin-left: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--tekst-gedempt);
+  margin-left: 0.375rem;
 }
 
 .bevestig-knop {
-  padding: 0.75rem 2rem;
+  padding: 0.8rem 2.25rem;
   font-size: 1rem;
   font-weight: 600;
-  background-color: #2563eb;
-  color: #ffffff;
+  font-family: inherit;
+  background-color: var(--knop-bg);
+  color: var(--knop-tekst);
   border: none;
-  border-radius: 0.5rem;
+  border-radius: 0.625rem;
   cursor: pointer;
-  transition: background-color 0.15s;
+  transition:
+    background-color 0.15s ease,
+    transform 0.1s ease,
+    opacity 0.15s ease;
+  letter-spacing: 0.01em;
 }
 
 .bevestig-knop:hover:not(:disabled) {
-  background-color: #1d4ed8;
+  background-color: var(--knop-hover);
+  transform: scale(1.02);
 }
 
 .bevestig-knop:disabled {
-  background-color: #93c5fd;
+  background-color: var(--knop-uitgeschakeld);
+  color: var(--tekst-gedempt);
   cursor: not-allowed;
+  transform: none;
 }
 </style>

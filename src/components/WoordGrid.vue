@@ -54,44 +54,50 @@ function groepKleur(woord: string): string {
 
 .woord-vak {
   padding: 1rem 0.5rem;
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 600;
+  font-family: inherit;
   text-align: center;
-  border: 2px solid #d1d5db;
-  border-radius: 0.5rem;
-  background-color: #f9fafb;
+  border: 1.5px solid var(--woord-rand);
+  border-radius: 0.625rem;
+  background-color: var(--woord-bg);
+  color: var(--tekst-primair);
   cursor: pointer;
   transition:
-    background-color 0.15s,
-    border-color 0.15s;
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    transform 0.1s ease;
   min-height: 3.5rem;
-  color: #111827;
+  line-height: 1.3;
 }
 
 .woord-vak:hover:not(:disabled) {
-  background-color: #e5e7eb;
+  background-color: var(--woord-hover-bg);
+  border-color: var(--rand-hover);
+  transform: scale(1.02);
 }
 
 .woord-vak--geselecteerd {
-  background-color: #bfdbfe !important;
-  border-color: #2563eb;
-  color: #1e3a8a;
+  background-color: var(--woord-geselecteerd-bg) !important;
+  border-color: var(--woord-geselecteerd-rand) !important;
+  color: var(--woord-geselecteerd-tekst) !important;
 }
 
 .woord-vak--opgelost {
-  color: #ffffff;
-  border-color: transparent;
+  color: #ffffff !important;
+  border-color: transparent !important;
   cursor: default;
+  transform: none !important;
 }
 
 .woord-vak:disabled:not(.woord-vak--opgelost) {
-  opacity: 0.5;
+  opacity: 0.45;
   cursor: not-allowed;
 }
 
 @media (max-width: 480px) {
   .woord-vak {
-    font-size: 0.875rem;
+    font-size: 0.8rem;
     padding: 0.75rem 0.25rem;
   }
 }

@@ -1,0 +1,276 @@
+/* ============================================================
+   Woordgroep — Globale stijlen & CSS-variabelen voor thema's
+   ============================================================ */
+
+/* Lettertypen via Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,700;0,9..144,800;1,9..144,400&family=DM+Sans:wght@400;500;600;700&display=swap');
+
+/* ── Licht thema (standaard) ── */
+:root {
+  --bg-pagina: #faf8f5;
+  --bg-kaart: #ffffff;
+  --bg-kaart-subtiel: #f3f1ed;
+  --bg-invoer: #f0ede8;
+
+  --tekst-primair: #1a1510;
+  --tekst-secundair: #5c5650;
+  --tekst-gedempt: #9c9590;
+  --tekst-link: #2563eb;
+
+  --rand: #ddd8d0;
+  --rand-hover: #bfbab0;
+  --schaduw: rgba(26, 21, 16, 0.08);
+  --schaduw-groot: rgba(26, 21, 16, 0.18);
+
+  /* Moeilijkheidsgraad-kaarten */
+  --gemakkelijk-bg: #f0fdf4;
+  --gemakkelijk-rand: #86efac;
+  --gemakkelijk-knop: #16a34a;
+  --gemakkelijk-knop-hover: #15803d;
+  --gemiddeld-bg: #fffbeb;
+  --gemiddeld-rand: #fcd34d;
+  --gemiddeld-knop: #d97706;
+  --gemiddeld-knop-hover: #b45309;
+  --moeilijk-bg: #fef2f2;
+  --moeilijk-rand: #fca5a5;
+  --moeilijk-knop: #dc2626;
+  --moeilijk-knop-hover: #b91c1c;
+
+  /* Woordgrid */
+  --woord-bg: #f5f2ee;
+  --woord-rand: #d8d3cb;
+  --woord-hover-bg: #e8e4dc;
+  --woord-geselecteerd-bg: #dbeafe;
+  --woord-geselecteerd-rand: #2563eb;
+  --woord-geselecteerd-tekst: #1e3a8a;
+
+  /* Bevestig-knop */
+  --knop-bg: #1a1510;
+  --knop-hover: #332c24;
+  --knop-uitgeschakeld: #c5bfb5;
+  --knop-tekst: #faf8f5;
+
+  /* Badge moeilijkheidsgraad */
+  --badge-gemakkelijk-bg: #dcfce7;
+  --badge-gemakkelijk-tekst: #166534;
+  --badge-gemiddeld-bg: #fef3c7;
+  --badge-gemiddeld-tekst: #92400e;
+  --badge-moeilijk-bg: #fee2e2;
+  --badge-moeilijk-tekst: #991b1b;
+
+  /* Feedback toast */
+  --toast-correct-bg: #dcfce7;
+  --toast-correct-tekst: #166534;
+  --toast-correct-rand: #16a34a;
+  --toast-fout-bg: #fee2e2;
+  --toast-fout-tekst: #991b1b;
+  --toast-fout-rand: #dc2626;
+
+  /* Status-kaarten (gewonnen / verloren) */
+  --gewonnen-bg: #f0fdf4;
+  --gewonnen-rand: #16a34a;
+  --gewonnen-tekst: #14532d;
+  --verloren-bg: #fef2f2;
+  --verloren-rand: #dc2626;
+  --verloren-tekst: #7f1d1d;
+
+  /* Hart-iconen */
+  --hart-actief: #dc2626;
+  --hart-inactief: #d1d5db;
+
+  /* Cookie-banner */
+  --cookie-bg: #ffffff;
+  --cookie-rand: #e5e7eb;
+  --cookie-badge-verplicht-bg: #dcfce7;
+  --cookie-badge-verplicht-tekst: #166534;
+  --cookie-badge-optioneel-bg: #fef3c7;
+  --cookie-badge-optioneel-tekst: #92400e;
+  --cookie-secundair-bg: #f3f4f6;
+  --cookie-secundair-tekst: #374151;
+  --cookie-secundair-hover: #e5e7eb;
+
+  /* Footer */
+  --footer-tekst: #9ca3af;
+  --footer-tekst-hover: #6b7280;
+
+  /* Thema-schakelaar */
+  --schakelaar-bg: #e8e4dc;
+  --schakelaar-hover: #d8d3cb;
+  --schakelaar-tekst: #1a1510;
+
+  /* Overlay */
+  --overlay: rgba(26, 21, 16, 0.55);
+
+  /* Modal */
+  --modal-bg: #ffffff;
+  --modal-rand: #ddd8d0;
+
+  /* Instructies */
+  --instructie-stap-nr: #2563eb;
+  --instructie-stap-bg: #eff6ff;
+}
+
+/* ── Donker thema ── */
+[data-theme='dark'] {
+  --bg-pagina: #0f0d0b;
+  --bg-kaart: #1c1915;
+  --bg-kaart-subtiel: #242018;
+  --bg-invoer: #2a261f;
+
+  --tekst-primair: #f0ebe0;
+  --tekst-secundair: #a09880;
+  --tekst-gedempt: #6a6458;
+  --tekst-link: #60a5fa;
+
+  --rand: #363028;
+  --rand-hover: #4a4438;
+  --schaduw: rgba(0, 0, 0, 0.4);
+  --schaduw-groot: rgba(0, 0, 0, 0.6);
+
+  /* Moeilijkheidsgraad-kaarten */
+  --gemakkelijk-bg: #0d1f12;
+  --gemakkelijk-rand: #166534;
+  --gemakkelijk-knop: #16a34a;
+  --gemakkelijk-knop-hover: #15803d;
+  --gemiddeld-bg: #1f1800;
+  --gemiddeld-rand: #92400e;
+  --gemiddeld-knop: #d97706;
+  --gemiddeld-knop-hover: #b45309;
+  --moeilijk-bg: #1f0a0a;
+  --moeilijk-rand: #991b1b;
+  --moeilijk-knop: #dc2626;
+  --moeilijk-knop-hover: #b91c1c;
+
+  /* Woordgrid */
+  --woord-bg: #2a261f;
+  --woord-rand: #3d3830;
+  --woord-hover-bg: #34302a;
+  --woord-geselecteerd-bg: #1e3a5f;
+  --woord-geselecteerd-rand: #3b82f6;
+  --woord-geselecteerd-tekst: #bfdbfe;
+
+  /* Bevestig-knop */
+  --knop-bg: #f0ebe0;
+  --knop-hover: #ffffff;
+  --knop-uitgeschakeld: #3a3530;
+  --knop-tekst: #0f0d0b;
+
+  /* Badge moeilijkheidsgraad */
+  --badge-gemakkelijk-bg: #0d1f12;
+  --badge-gemakkelijk-tekst: #86efac;
+  --badge-gemiddeld-bg: #1f1500;
+  --badge-gemiddeld-tekst: #fcd34d;
+  --badge-moeilijk-bg: #1f0a0a;
+  --badge-moeilijk-tekst: #fca5a5;
+
+  /* Feedback toast */
+  --toast-correct-bg: #0d1f12;
+  --toast-correct-tekst: #86efac;
+  --toast-correct-rand: #16a34a;
+  --toast-fout-bg: #1f0a0a;
+  --toast-fout-tekst: #fca5a5;
+  --toast-fout-rand: #dc2626;
+
+  /* Status-kaarten */
+  --gewonnen-bg: #0d1f12;
+  --gewonnen-rand: #16a34a;
+  --gewonnen-tekst: #86efac;
+  --verloren-bg: #1f0a0a;
+  --verloren-rand: #dc2626;
+  --verloren-tekst: #fca5a5;
+
+  /* Hart-iconen */
+  --hart-actief: #ef4444;
+  --hart-inactief: #3a3530;
+
+  /* Cookie-banner */
+  --cookie-bg: #1c1915;
+  --cookie-rand: #363028;
+  --cookie-badge-verplicht-bg: #0d1f12;
+  --cookie-badge-verplicht-tekst: #86efac;
+  --cookie-badge-optioneel-bg: #1f1500;
+  --cookie-badge-optioneel-tekst: #fcd34d;
+  --cookie-secundair-bg: #2a261f;
+  --cookie-secundair-tekst: #c5bfb5;
+  --cookie-secundair-hover: #34302a;
+
+  /* Footer */
+  --footer-tekst: #6a6458;
+  --footer-tekst-hover: #9c9590;
+
+  /* Thema-schakelaar */
+  --schakelaar-bg: #2a261f;
+  --schakelaar-hover: #34302a;
+  --schakelaar-tekst: #f0ebe0;
+
+  /* Overlay */
+  --overlay: rgba(0, 0, 0, 0.7);
+
+  /* Modal */
+  --modal-bg: #1c1915;
+  --modal-rand: #363028;
+
+  /* Instructies */
+  --instructie-stap-nr: #60a5fa;
+  --instructie-stap-bg: #0f1a2a;
+}
+
+/* ── Basis-reset & typografie ── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  /* Betere rendering op hoge resoluties */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  font-family:
+    'DM Sans',
+    system-ui,
+    -apple-system,
+    sans-serif;
+  background-color: var(--bg-pagina);
+  color: var(--tekst-primair);
+  min-height: 100dvh;
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease;
+  line-height: 1.6;
+}
+
+/* Fraunces voor titels */
+h1,
+h2 {
+  font-family: 'Fraunces', Georgia, serif;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+/* Hoge resolutie: zorg voor scherpe randen */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .woord-vak,
+  .moeilijkheid-kaart,
+  .status-kaart,
+  .banner,
+  .modal-inhoud {
+    border-width: 1px;
+  }
+}
+
+/* Focusstijlen voor toegankelijkheid */
+:focus-visible {
+  outline: 2px solid var(--tekst-link);
+  outline-offset: 3px;
+  border-radius: 4px;
+}

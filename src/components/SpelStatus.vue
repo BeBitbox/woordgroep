@@ -40,22 +40,23 @@ const onopgelostGroepen = computed(() =>
 
 .status-kaart {
   text-align: center;
-  padding: 2rem;
-  border-radius: 0.75rem;
+  padding: 1.75rem 2rem;
+  border-radius: 1rem;
   max-width: 400px;
   width: 100%;
+  border: 1.5px solid transparent;
 }
 
 .status-kaart--gewonnen {
-  background-color: #dcfce7;
-  border: 2px solid #16a34a;
-  color: #14532d;
+  background-color: var(--gewonnen-bg);
+  border-color: var(--gewonnen-rand);
+  color: var(--gewonnen-tekst);
 }
 
 .status-kaart--verloren {
-  background-color: #fee2e2;
-  border: 2px solid #dc2626;
-  color: #7f1d1d;
+  background-color: var(--verloren-bg);
+  border-color: var(--verloren-rand);
+  color: var(--verloren-tekst);
 }
 
 .status-kaart h2 {
@@ -64,24 +65,33 @@ const onopgelostGroepen = computed(() =>
   margin-bottom: 0.5rem;
 }
 
+.status-kaart p {
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
 .onopgelost-label {
   margin-top: 0.5rem;
 }
 
 .opnieuw-knop {
-  margin-top: 1rem;
-  padding: 0.6rem 1.5rem;
-  font-size: 1rem;
+  margin-top: 1.25rem;
+  padding: 0.65rem 1.5rem;
+  font-size: 0.95rem;
   font-weight: 600;
+  font-family: inherit;
   border: none;
   border-radius: 0.5rem;
   cursor: pointer;
-  background-color: #1f2937;
-  color: #ffffff;
-  transition: background-color 0.15s;
+  background-color: var(--knop-bg);
+  color: var(--knop-tekst);
+  transition:
+    background-color 0.15s ease,
+    transform 0.1s ease;
 }
 
 .opnieuw-knop:hover {
-  background-color: #374151;
+  background-color: var(--knop-hover);
+  transform: scale(1.03);
 }
 </style>

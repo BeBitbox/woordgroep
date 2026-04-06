@@ -3,7 +3,7 @@ import { mount } from '@vue/test-utils'
 import { setActivePinia, createPinia } from 'pinia'
 import WoordGrid from '../components/WoordGrid.vue'
 import { useSpelStore } from '../stores/spelStore'
-import { allePuzzels} from '@/data'
+import { allePuzzels } from '@/data'
 
 beforeEach(() => {
   vi.useFakeTimers()

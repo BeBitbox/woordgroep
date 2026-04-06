@@ -6,7 +6,10 @@ const consentStore = useCookieConsentStore()
 const insRef = useTemplateRef<HTMLElement>('insEl')
 
 onMounted(() => {
-  if (consentStore.adsenseAccepted && insRef.value?.getAttribute('data-adsbygoogle-status') === null) {
+  if (
+    consentStore.adsenseAccepted &&
+    insRef.value?.getAttribute('data-adsbygoogle-status') === null
+  ) {
     // @ts-expect-error adsbygoogle wordt door het AdSense-script op window gezet
     ;(window.adsbygoogle = window.adsbygoogle || []).push({})
   }

@@ -34,7 +34,6 @@ watch(
 <template>
   <main class="spel-view">
     <h1 class="spel-titel">Woordgroep</h1>
-    <p class="spel-uitleg">Selecteer 4 woorden die bij elkaar horen en bevestig je keuze.</p>
     <p
       class="moeilijkheid-badge"
       :class="`moeilijkheid-badge--${store.puzzelData.moeilijkheid.toLowerCase()}`"
@@ -49,7 +48,9 @@ watch(
         <div
           v-if="store.feedback"
           class="feedback-toast"
-          :class="store.feedback.type === 'correct' ? 'feedback-toast--correct' : 'feedback-toast--fout'"
+          :class="
+            store.feedback.type === 'correct' ? 'feedback-toast--correct' : 'feedback-toast--fout'
+          "
         >
           <template v-if="store.feedback.type === 'correct'">
             🎉 {{ store.feedback.groepId }} 🎉
@@ -66,37 +67,43 @@ watch(
 .spel-view {
   max-width: 640px;
   margin: 0 auto;
-  padding: 2rem 1rem;
-  font-family: sans-serif;
+  padding: 2rem 1.25rem;
 }
 
 .spel-titel {
   text-align: center;
-  font-size: 2rem;
-  font-weight: 700;
-  margin-bottom: 0.5rem;
-}
-
-.spel-uitleg {
-  text-align: center;
-  color: #6b7280;
-  margin-bottom: 0.5rem;
+  font-size: 2.25rem;
+  font-weight: 800;
+  color: var(--tekst-primair);
+  margin-bottom: 0.875rem;
 }
 
 .moeilijkheid-badge {
-  display: inline-block;
+  display: block;
   margin: 0 auto 1.5rem;
-  padding: 0.2rem 0.75rem;
+  padding: 0.25rem 0.875rem;
   border-radius: 9999px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   text-align: center;
   width: fit-content;
-  left: 50%;
-  position: relative;
-  transform: translateX(-50%);
+}
+
+.moeilijkheid-badge--gemakkelijk {
+  background-color: var(--badge-gemakkelijk-bg);
+  color: var(--badge-gemakkelijk-tekst);
+}
+
+.moeilijkheid-badge--gemiddeld {
+  background-color: var(--badge-gemiddeld-bg);
+  color: var(--badge-gemiddeld-tekst);
+}
+
+.moeilijkheid-badge--moeilijk {
+  background-color: var(--badge-moeilijk-bg);
+  color: var(--badge-moeilijk-tekst);
 }
 
 .feedback-wrapper {
@@ -111,24 +118,23 @@ watch(
   z-index: 10;
   padding: 0.6rem 1.25rem;
   border-radius: 0.75rem;
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   font-weight: 700;
   white-space: nowrap;
   pointer-events: none;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 20px var(--schaduw-groot);
 }
 
 .feedback-toast--correct {
-  background-color: #dcfce7;
-  color: #166534;
-  border: 2px solid #16a34a;
+  background-color: var(--toast-correct-bg);
+  color: var(--toast-correct-tekst);
+  border: 2px solid var(--toast-correct-rand);
 }
 
 .feedback-toast--fout {
-  background-color: #fee2e2;
-  color: #991b1b;
-  border: 2px solid #dc2626;
-  font-size: 1.5rem;
+  background-color: var(--toast-fout-bg);
+  color: var(--toast-fout-tekst);
+  border: 2px solid var(--toast-fout-rand);
 }
 
 .feedback-enter-active,
@@ -148,20 +154,5 @@ watch(
 .feedback-leave-from {
   opacity: 1;
   transform: translate(-50%, -50%) scale(1);
-}
-
-.moeilijkheid-badge--gemakkelijk {
-  background-color: #dcfce7;
-  color: #166534;
-}
-
-.moeilijkheid-badge--gemiddeld {
-  background-color: #fef3c7;
-  color: #92400e;
-}
-
-.moeilijkheid-badge--moeilijk {
-  background-color: #fee2e2;
-  color: #991b1b;
 }
 </style>

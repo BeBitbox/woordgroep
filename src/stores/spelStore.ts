@@ -48,7 +48,7 @@ function slaVoortgangOp(voortgang: OpgeslagenVoortgang, moeilijkheid: string): v
   try {
     localStorage.setItem(storageKey(moeilijkheid), JSON.stringify(voortgang))
   } catch {
-    console.error("Local storage niet beschikbaar")
+    console.error('Local storage niet beschikbaar')
   }
 }
 
@@ -56,7 +56,9 @@ export const useSpelStore = defineStore('spel', () => {
   const datum = vandaagDatum()
   const huidigeMoeilijkheid = ref<MoeilijkheidLower>('gemakkelijk')
 
-  const puzzelData = ref<PuzzelData>(dagelijksPuzzelVoor(moeilijkheidNaarType(huidigeMoeilijkheid.value)))
+  const puzzelData = ref<PuzzelData>(
+    dagelijksPuzzelVoor(moeilijkheidNaarType(huidigeMoeilijkheid.value)),
+  )
   const geselecteerdeWoorden = ref<string[]>([])
   const opgelostGroepIds = ref<string[]>([])
   const foutePogingen = ref(0)

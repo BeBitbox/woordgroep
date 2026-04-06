@@ -19,9 +19,7 @@ function startSpel(moeilijkheid: MoeilijkheidLower): void {
 <template>
   <main class="startscherm">
     <h1 class="startscherm-titel">Woordgroep</h1>
-    <p class="startscherm-uitleg">
-      Selecteer een moeilijkheidsgraad om te spelen. Elke graad kan éénmaal per dag gespeeld worden.
-    </p>
+    <p class="startscherm-ondertitel">Dagelijks woordspel</p>
 
     <div class="moeilijkheid-lijst">
       <div
@@ -36,9 +34,7 @@ function startSpel(moeilijkheid: MoeilijkheidLower): void {
             {{ statsStore.stats[m.waarde].gewonnen }} /
             {{ statsStore.stats[m.waarde].gespeeld }} gewonnen
           </span>
-          <span class="kaart-stats" v-if="statsStore.stats[m.waarde].gespeeld <= 0">
-            0 gespeeld
-          </span>
+          <span class="kaart-stats" v-else>Nog niet gespeeld</span>
         </div>
         <div class="kaart-actie">
           <button
@@ -62,29 +58,31 @@ function startSpel(moeilijkheid: MoeilijkheidLower): void {
 .startscherm {
   max-width: 480px;
   margin: 0 auto;
-  padding: 2rem 1rem;
-  font-family: sans-serif;
+  padding: 2.5rem 1.25rem 2rem;
 }
 
 .startscherm-titel {
   text-align: center;
-  font-size: 2rem;
-  font-weight: 700;
-  margin-bottom: 0.5rem;
+  font-size: 2.75rem;
+  font-weight: 800;
+  color: var(--tekst-primair);
+  margin-bottom: 0.25rem;
 }
 
-.startscherm-uitleg {
+.startscherm-ondertitel {
   text-align: center;
-  color: #6b7280;
-  margin-bottom: 2rem;
-  font-size: 0.95rem;
-  line-height: 1.5;
+  color: var(--tekst-gedempt);
+  margin-bottom: 2.5rem;
+  font-size: 0.9rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 500;
 }
 
 .moeilijkheid-lijst {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.875rem;
 }
 
 .moeilijkheid-kaart {
@@ -92,23 +90,26 @@ function startSpel(moeilijkheid: MoeilijkheidLower): void {
   align-items: center;
   justify-content: space-between;
   padding: 1rem 1.25rem;
-  border-radius: 0.75rem;
-  border: 2px solid transparent;
+  border-radius: 0.875rem;
+  border: 1.5px solid transparent;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease;
 }
 
 .moeilijkheid-kaart--gemakkelijk {
-  background-color: #f0fdf4;
-  border-color: #86efac;
+  background-color: var(--gemakkelijk-bg);
+  border-color: var(--gemakkelijk-rand);
 }
 
 .moeilijkheid-kaart--gemiddeld {
-  background-color: #fffbeb;
-  border-color: #fcd34d;
+  background-color: var(--gemiddeld-bg);
+  border-color: var(--gemiddeld-rand);
 }
 
 .moeilijkheid-kaart--moeilijk {
-  background-color: #fef2f2;
-  border-color: #fca5a5;
+  background-color: var(--moeilijk-bg);
+  border-color: var(--moeilijk-rand);
 }
 
 .kaart-info {
@@ -120,52 +121,59 @@ function startSpel(moeilijkheid: MoeilijkheidLower): void {
 .kaart-label {
   font-weight: 700;
   font-size: 1rem;
-  color: #111827;
+  color: var(--tekst-primair);
 }
 
 .kaart-stats {
   font-size: 0.8rem;
-  color: #6b7280;
+  color: var(--tekst-gedempt);
 }
 
 .speel-knop {
-  padding: 0.6rem 1.25rem;
+  padding: 0.55rem 1.25rem;
   font-size: 0.9rem;
   font-weight: 600;
   border: none;
   border-radius: 0.5rem;
   cursor: pointer;
-  transition: background-color 0.15s;
+  transition:
+    background-color 0.15s,
+    transform 0.1s;
   color: #ffffff;
+  font-family: inherit;
+}
+
+.speel-knop:hover {
+  transform: scale(1.04);
 }
 
 .speel-knop--gemakkelijk {
-  background-color: #16a34a;
+  background-color: var(--gemakkelijk-knop);
 }
 
 .speel-knop--gemakkelijk:hover {
-  background-color: #15803d;
+  background-color: var(--gemakkelijk-knop-hover);
 }
 
 .speel-knop--gemiddeld {
-  background-color: #d97706;
+  background-color: var(--gemiddeld-knop);
 }
 
 .speel-knop--gemiddeld:hover {
-  background-color: #b45309;
+  background-color: var(--gemiddeld-knop-hover);
 }
 
 .speel-knop--moeilijk {
-  background-color: #dc2626;
+  background-color: var(--moeilijk-knop);
 }
 
 .speel-knop--moeilijk:hover {
-  background-color: #b91c1c;
+  background-color: var(--moeilijk-knop-hover);
 }
 
 .al-gespeeld {
   font-size: 0.8rem;
-  color: #9ca3af;
+  color: var(--tekst-gedempt);
   font-style: italic;
 }
 </style>

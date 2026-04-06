@@ -1,4 +1,4 @@
-import { ref, watch } from 'vue'
+import { ref } from 'vue'
 import { defineStore } from 'pinia'
 
 const ADSENSE_PUBLISHER_ID = 'ca-pub-XXXXXXXXXX'

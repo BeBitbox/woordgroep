@@ -1,15 +1,96 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import CookieBanner from '@/components/CookieBanner.vue'
 import SiteFooter from '@/components/SiteFooter.vue'
+import ThemeToggle from '@/components/ThemeToggle.vue'
+import SpeluitlegModal from '@/components/SpeluitlegModal.vue'
 import { useCookieConsentStore } from '@/stores/cookieConsent'
 
 const consentStore = useCookieConsentStore()
+const speluitlegOpen = ref(false)
+
+// Feature flag: VITE_COOKIE_CONSENT_ACTIEF=false verbergt het cookie consent-scherm
+const cookieConsentActief = import.meta.env.VITE_COOKIE_CONSENT_ACTIEF !== 'false'
 </script>
 
 <template>
-  <CookieBanner v-if="!consentStore.consentGiven" />
-  <template v-else>
+  <CookieBanner v-if="cookieConsentActief && !consentStore.consentGiven" />
+  <template v-if="!cookieConsentActief || consentStore.consentGiven">
+    <header class="site-header">
+      <div class="header-rechts">
+        <button
+          class="info-knop"
+          aria-label="Speluitleg bekijken"
+          title="Speluitleg"
+          @click="speluitlegOpen = true"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            width="18"
+            height="18"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" y1="16" x2="12" y2="12" />
+            <line x1="12" y1="8" x2="12.01" y2="8" />
+          </svg>
+        </button>
+        <ThemeToggle />
+      </div>
+    </header>
+
     <RouterView />
     <SiteFooter />
+
+    <SpeluitlegModal :open="speluitlegOpen" @sluit="speluitlegOpen = false" />
   </template>
 </template>
+
+<style scoped>
+.site-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0.75rem 1.25rem;
+  border-bottom: 1px solid var(--rand);
+  background-color: var(--bg-pagina);
+  transition: background-color 0.25s ease;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-rechts {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.info-knop {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  border: 1.5px solid var(--rand);
+  background-color: var(--schakelaar-bg);
+  color: var(--schakelaar-tekst);
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.15s ease;
+}
+
+.info-knop:hover {
+  background-color: var(--schakelaar-hover);
+  border-color: var(--rand-hover);
+  transform: scale(1.08);
+}
+</style>
