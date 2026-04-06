@@ -18,7 +18,6 @@ function startSpel(moeilijkheid: MoeilijkheidLower): void {
 
 <template>
   <main class="startscherm">
-    <h1 class="startscherm-titel">Woordgroep</h1>
     <p class="startscherm-ondertitel">Dagelijks woordspel</p>
 
     <div class="moeilijkheid-lijst">
@@ -59,14 +58,6 @@ function startSpel(moeilijkheid: MoeilijkheidLower): void {
   max-width: 480px;
   margin: 0 auto;
   padding: 2.5rem 1.25rem 2rem;
-}
-
-.startscherm-titel {
-  text-align: center;
-  font-size: 2.75rem;
-  font-weight: 800;
-  color: var(--tekst-primair);
-  margin-bottom: 0.25rem;
 }
 
 .startscherm-ondertitel {

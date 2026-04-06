@@ -33,7 +33,6 @@ watch(
 
 <template>
   <main class="spel-view">
-    <h1 class="spel-titel">Woordgroep</h1>
     <p
       class="moeilijkheid-badge"
       :class="`moeilijkheid-badge--${store.puzzelData.moeilijkheid.toLowerCase()}`"
@@ -74,14 +73,6 @@ watch(
   .spel-view {
     padding: 1.25rem 0.625rem;
   }
-}
-
-.spel-titel {
-  text-align: center;
-  font-size: 2.25rem;
-  font-weight: 800;
-  color: var(--tekst-primair);
-  margin-bottom: 0.875rem;
 }
 
 .moeilijkheid-badge {

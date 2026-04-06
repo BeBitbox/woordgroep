@@ -17,6 +17,9 @@ const cookieConsentActief = import.meta.env.VITE_COOKIE_CONSENT_ACTIEF !== 'fals
   <CookieBanner v-if="cookieConsentActief && !consentStore.consentGiven" />
   <template v-if="!cookieConsentActief || consentStore.consentGiven">
     <header class="site-header">
+      <RouterLink to="/" class="header-logo" aria-label="Terug naar startscherm">
+        <span class="logo-letter" aria-hidden="true">W</span>oordgroep
+      </RouterLink>
       <div class="header-rechts">
         <button
           class="info-knop"
@@ -55,7 +58,7 @@ const cookieConsentActief = import.meta.env.VITE_COOKIE_CONSENT_ACTIEF !== 'fals
 .site-header {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: space-between;
   padding: 0.75rem 1.25rem;
   border-bottom: 1px solid var(--rand);
   background-color: var(--bg-pagina);
@@ -69,6 +72,38 @@ const cookieConsentActief = import.meta.env.VITE_COOKIE_CONSENT_ACTIEF !== 'fals
   display: flex;
   align-items: center;
   gap: 0.5rem;
+}
+
+.header-logo {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--tekst-primair);
+  text-decoration: none;
+  letter-spacing: -0.01em;
+  transition: opacity 0.15s ease;
+}
+
+.header-logo:hover {
+  opacity: 0.7;
+}
+
+.logo-letter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  background-color: #16a34a;
+  color: #ffffff;
+  border-radius: 0.3rem;
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 1rem;
+  font-weight: 700;
+  margin-right: 0.1em;
+  vertical-align: middle;
+  position: relative;
+  top: -0.05em;
 }
 
 .info-knop {
