@@ -70,6 +70,7 @@ describe('spelStore — bevestigKeuze', () => {
     foutSelectie.slice(0, 4).forEach((w) => store.selecteerWoord(w))
     store.bevestigKeuze()
     expect(store.foutePogingen).toBe(1)
+    vi.runAllTimers()
     expect(store.geselecteerdeWoorden).toHaveLength(0)
   })
 

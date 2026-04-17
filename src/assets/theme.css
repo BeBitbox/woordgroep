@@ -108,6 +108,13 @@
   /* Instructies */
   --instructie-stap-nr: #2563eb;
   --instructie-stap-bg: #eff6ff;
+
+  /* Tegel-schaduw */
+  --tegel-schaduw: inset 0 -2px 0 rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.04);
+  --tegel-schaduw-hover: inset 0 -2px 0 rgba(0, 0, 0, 0.06), 0 6px 16px rgba(0, 0, 0, 0.1);
+
+  /* Achtergrond-glow */
+  --bg-glow: rgba(245, 235, 220, 0.6);
 }
 
 /* ── Donker thema ── */
@@ -213,6 +220,13 @@
   /* Instructies */
   --instructie-stap-nr: #60a5fa;
   --instructie-stap-bg: #0f1a2a;
+
+  /* Tegel-schaduw */
+  --tegel-schaduw: inset 0 -2px 0 rgba(0, 0, 0, 0.2), 0 1px 3px rgba(0, 0, 0, 0.15);
+  --tegel-schaduw-hover: inset 0 -2px 0 rgba(0, 0, 0, 0.2), 0 6px 16px rgba(0, 0, 0, 0.3);
+
+  /* Achtergrond-glow */
+  --bg-glow: rgba(60, 50, 30, 0.25);
 }
 
 /* ── Basis-reset & typografie ── */
@@ -241,6 +255,7 @@ body {
     -apple-system,
     sans-serif;
   background-color: var(--bg-pagina);
+  background-image: radial-gradient(ellipse at 50% 0%, var(--bg-glow) 0%, transparent 60%);
   color: var(--tekst-primair);
   min-height: 100dvh;
   transition:

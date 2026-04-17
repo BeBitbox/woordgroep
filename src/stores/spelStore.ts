@@ -63,7 +63,9 @@ export const useSpelStore = defineStore('spel', () => {
   const opgelostGroepIds = ref<string[]>([])
   const foutePogingen = ref(0)
   const spelStatus = ref<'bezig' | 'gewonnen' | 'verloren'>('bezig')
-  const feedback = ref<{ type: 'correct'; groepId: string } | { type: 'fout' } | null>(null)
+  const feedback = ref<
+    { type: 'correct'; groepId: string } | { type: 'fout'; bijna: number } | null
+  >(null)
 
   const resterendePogingen = computed(() => 3 - foutePogingen.value)
 
@@ -163,20 +165,28 @@ export const useSpelStore = defineStore('spel', () => {
         spelStatus.value = 'gewonnen'
       }
     } else {
-      feedback.value = { type: 'fout' }
+      const telling = new Map<string, number>()
+      for (const g of groepen) {
+        if (g) telling.set(g.id, (telling.get(g.id) ?? 0) + 1)
+      }
+      const bijna = Math.max(...telling.values())
+      feedback.value = { type: 'fout', bijna }
+      foutePogingen.value++
+
       setTimeout(() => {
         feedback.value = null
-      }, 500)
+        geselecteerdeWoorden.value = []
 
-      foutePogingen.value++
-      geselecteerdeWoorden.value = []
-
-      if (foutePogingen.value >= 3) {
-        spelStatus.value = 'verloren'
-      }
+        if (foutePogingen.value >= 3) {
+          spelStatus.value = 'verloren'
+        }
+        _slaOp()
+      }, 1200)
     }
 
-    _slaOp()
+    if (alleZelfdeGroep) {
+      _slaOp()
+    }
   }
 
   function resetSpel(): void {

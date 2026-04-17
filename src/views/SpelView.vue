@@ -33,32 +33,65 @@ watch(
 
 <template>
   <main class="spel-view">
-    <p
-      class="moeilijkheid-badge"
-      :class="`moeilijkheid-badge--${store.puzzelData.moeilijkheid.toLowerCase()}`"
-      :aria-label="`Moeilijkheid: ${store.puzzelData.moeilijkheid}`"
-    >
-      {{ store.puzzelData.moeilijkheid }}
-    </p>
-    <SpelStatus />
-    <div class="feedback-wrapper">
-      <WoordGrid />
-      <Transition name="feedback">
-        <div
-          v-if="store.feedback"
-          class="feedback-toast"
-          :class="
-            store.feedback.type === 'correct' ? 'feedback-toast--correct' : 'feedback-toast--fout'
+    <div class="spel-header">
+      <p
+        class="moeilijkheid-badge"
+        :class="`moeilijkheid-badge--${store.puzzelData.moeilijkheid.toLowerCase()}`"
+        :aria-label="`Moeilijkheid: ${store.puzzelData.moeilijkheid}`"
+      >
+        {{ store.puzzelData.moeilijkheid }}
+      </p>
+      <div class="voortgang-stippen" aria-label="Voortgang">
+        <span
+          v-for="groep in store.puzzelData.groepen"
+          :key="groep.id"
+          class="voortgang-stip"
+          :class="{ 'voortgang-stip--opgelost': store.opgelostGroepIds.includes(groep.id) }"
+          :style="
+            store.opgelostGroepIds.includes(groep.id) ? { backgroundColor: groep.kleur } : {}
           "
-        >
-          <template v-if="store.feedback.type === 'correct'">
-            🎉 {{ store.feedback.groepId }} 🎉
-          </template>
-          <template v-else>&#10060;</template>
-        </div>
-      </Transition>
+        ></span>
+      </div>
     </div>
-    <SpelBesturing />
+    <SpelStatus />
+    <template v-if="store.spelStatus === 'bezig'">
+      <div class="feedback-wrapper">
+        <WoordGrid />
+        <Transition name="feedback">
+          <div
+            v-if="store.feedback"
+            class="feedback-toast"
+            :class="
+              store.feedback.type === 'correct'
+                ? 'feedback-toast--correct'
+                : 'feedback-toast--fout'
+            "
+          >
+            <template v-if="store.feedback.type === 'correct'">
+              <svg
+                class="feedback-icoon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="3"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
+              {{ store.feedback.groepId }}
+            </template>
+            <template v-else>
+              &#10060;
+              <span v-if="store.feedback.bijna >= 3" class="feedback-bijna">
+                {{ store.feedback.bijna }} van de 4 juist
+              </span>
+            </template>
+          </div>
+        </Transition>
+      </div>
+      <SpelBesturing />
+    </template>
   </main>
 </template>
 
@@ -66,26 +99,43 @@ watch(
 .spel-view {
   max-width: 640px;
   margin: 0 auto;
-  padding: 2rem 1rem;
+  padding: 1.5rem 1rem 2rem;
 }
 
 @media (max-width: 480px) {
   .spel-view {
-    padding: 1.25rem 0.625rem;
+    padding: 1rem 0.625rem;
+  }
+}
+
+/* ── Header met badge + voortgang ── */
+.spel-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+  animation: header-in 0.4s ease both;
+}
+
+@keyframes header-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
 .moeilijkheid-badge {
-  display: block;
-  margin: 0 auto 1.5rem;
   padding: 0.25rem 0.875rem;
   border-radius: 9999px;
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  text-align: center;
-  width: fit-content;
 }
 
 .moeilijkheid-badge--gemakkelijk {
@@ -103,6 +153,27 @@ watch(
   color: var(--badge-moeilijk-tekst);
 }
 
+/* ── Voortgangsindicator ── */
+.voortgang-stippen {
+  display: flex;
+  gap: 0.375rem;
+}
+
+.voortgang-stip {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background-color: var(--rand);
+  transition:
+    background-color 0.4s ease,
+    transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.voortgang-stip--opgelost {
+  transform: scale(1.4);
+}
+
+/* ── Feedback ── */
 .feedback-wrapper {
   position: relative;
 }
@@ -120,6 +191,15 @@ watch(
   white-space: nowrap;
   pointer-events: none;
   box-shadow: 0 4px 20px var(--schaduw-groot);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.feedback-icoon {
+  width: 1.25rem;
+  height: 1.25rem;
+  flex-shrink: 0;
 }
 
 .feedback-toast--correct {
@@ -132,6 +212,26 @@ watch(
   background-color: var(--toast-fout-bg);
   color: var(--toast-fout-tekst);
   border: 2px solid var(--toast-fout-rand);
+  flex-direction: column;
+  animation: pulse-fout 0.6s ease;
+}
+
+@keyframes pulse-fout {
+  0%,
+  100% {
+    box-shadow: 0 4px 20px var(--schaduw-groot);
+  }
+  50% {
+    box-shadow:
+      0 4px 20px var(--schaduw-groot),
+      0 0 30px var(--toast-fout-rand);
+  }
+}
+
+.feedback-bijna {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 600;
 }
 
 .feedback-enter-active,

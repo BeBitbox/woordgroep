@@ -46,7 +46,7 @@ describe('WoordGrid', () => {
     expect(spy).toHaveBeenCalledOnce()
   })
 
-  it('geeft opgeloste woorden de klasse woord-vak--opgelost', async () => {
+  it('toont opgeloste groepen als banners', async () => {
     const store = useSpelStore()
     store.initialiseerSpel('gemakkelijk')
     const groep = allePuzzels[0]!.groepen[0]!
@@ -54,7 +54,8 @@ describe('WoordGrid', () => {
     store.bevestigKeuze()
 
     const wrapper = mount(WoordGrid)
-    const opgelosteKnoppen = wrapper.findAll('.woord-vak--opgelost')
-    expect(opgelosteKnoppen).toHaveLength(4)
+    const banners = wrapper.findAll('.groep-banner')
+    expect(banners).toHaveLength(1)
+    expect(banners[0]!.text()).toContain(groep.id)
   })
 })

@@ -5,7 +5,10 @@ import { useSpelStore } from '@/stores/spelStore'
 const store = useSpelStore()
 
 const kanBevestigen = computed(
-  () => store.geselecteerdeWoorden.length === 4 && store.spelStatus === 'bezig',
+  () =>
+    store.geselecteerdeWoorden.length === 4 &&
+    store.spelStatus === 'bezig' &&
+    store.feedback === null,
 )
 </script>
 
@@ -19,7 +22,7 @@ const kanBevestigen = computed(
         :class="{ 'hart--weg': n > store.resterendePogingen }"
         aria-hidden="true"
       >
-        ♥
+        &#9829;
       </span>
       <span class="pogingen-label">
         {{ store.resterendePogingen }}
@@ -28,7 +31,12 @@ const kanBevestigen = computed(
         over
       </span>
     </div>
-    <button class="bevestig-knop" :disabled="!kanBevestigen" @click="store.bevestigKeuze()">
+    <button
+      class="bevestig-knop"
+      :class="{ 'bevestig-knop--actief': kanBevestigen }"
+      :disabled="!kanBevestigen"
+      @click="store.bevestigKeuze()"
+    >
       Bevestig keuze
     </button>
   </div>
@@ -53,14 +61,16 @@ const kanBevestigen = computed(
   color: var(--hart-actief);
   font-size: 1.375rem;
   transition:
-    color 0.2s ease,
-    opacity 0.2s ease;
+    color 0.3s ease,
+    opacity 0.3s ease,
+    transform 0.3s ease;
   line-height: 1;
 }
 
 .hart--weg {
   color: var(--hart-inactief);
-  opacity: 0.6;
+  opacity: 0.4;
+  transform: scale(0.85);
 }
 
 .pogingen-label {
@@ -82,7 +92,7 @@ const kanBevestigen = computed(
   transition:
     background-color 0.15s ease,
     transform 0.1s ease,
-    opacity 0.15s ease;
+    box-shadow 0.3s ease;
   letter-spacing: 0.01em;
 }
 
@@ -91,10 +101,29 @@ const kanBevestigen = computed(
   transform: scale(1.02);
 }
 
+.bevestig-knop:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.bevestig-knop--actief {
+  animation: pulse-ready 2s ease-in-out infinite;
+}
+
+@keyframes pulse-ready {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 transparent;
+  }
+  50% {
+    box-shadow: 0 0 0 5px var(--schaduw);
+  }
+}
+
 .bevestig-knop:disabled {
   background-color: var(--knop-uitgeschakeld);
   color: var(--tekst-gedempt);
   cursor: not-allowed;
   transform: none;
+  animation: none;
 }
 </style>
