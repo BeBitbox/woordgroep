@@ -2,7 +2,7 @@
 
 ## Doel
 
-Bij het opstarten van de applicatie wordt de gebruiker verplicht een cookiekeuze te maken vooraleer de applicatie verder toegankelijk is. De cookiebanner informeert de gebruiker over het gebruik van functionele cookies (voor het bijhouden van win/verlies-statistieken per moeilijkheidsgraad) en biedt de optie om Google AdSense-cookies te accepteren of te weigeren. De cookiekeuze wordt éénmalig gevraagd en persistent opgeslagen in de browser.
+Bij het opstarten van de applicatie wordt de gebruiker verplicht een cookiekeuze te maken vooraleer de applicatie verder toegankelijk is. De cookiebanner informeert de gebruiker over het gebruik van functionele cookies (voor het bijhouden van win/verlies-statistieken per moeilijkheidsgraad). De cookiekeuze wordt éénmalig gevraagd en persistent opgeslagen in de browser.
 
 Na de cookiekeuze wordt de gebruiker naar het startscherm geleid. Het startscherm toont een overzicht van de win/verlies-statistieken per moeilijkheidsgraad en laat de gebruiker een moeilijkheidsgraad selecteren om een nieuw spel te starten. Elke moeilijkheidsgraad kan slechts éénmaal per kalenderdag gespeeld worden. Na het afronden van een spel keert de gebruiker terug naar het startscherm om eventueel een andere moeilijkheidsgraad te kiezen, zonder de applicatie te herladen.
 
@@ -10,10 +10,10 @@ De functionele cookie slaat per moeilijkheidsgraad het totaal aantal gespeelde e
 
 ## Notities
 
-- De cookiebanner moet voldoen aan de GDPR-vereisten: functionele cookies zijn verplicht en kunnen niet geweigerd worden; enkel de optionele AdSense-cookies kunnen geaccepteerd of geweigerd worden.
+- De cookiebanner moet voldoen aan de GDPR-vereisten: functionele cookies zijn verplicht en kunnen niet geweigerd worden.
 - De cookiekeuze wordt opgeslagen als een persistente cookie (niet sessie-cookie) zodat de banner niet bij elk bezoek opnieuw verschijnt.
 - De "éénmaal per dag"-beperking per moeilijkheidsgraad wordt bepaald op basis van de lokale kalenderdag van de gebruiker (midnight reset). De datum van de laatste speelbeurt per moeilijkheidsgraad moet ook in de functionele cookie bewaard worden.
-- De statistieken (totaal gespeeld / gewonnen per moeilijkheidsgraad) worden opgeslagen in de functionele cookie en mogen niet afhangen van de AdSense-keuze.
+- De statistieken (totaal gespeeld / gewonnen per moeilijkheidsgraad) worden opgeslagen in de functionele cookie.
 - Bij het verwijderen van cookies door de gebruiker (bijv. via browserinstellingen) worden alle statistieken en voorkeuren gereset — dit is het verwachte gedrag en vereist geen extra afhandeling.
 - De overstap van cookiebanner → startscherm → spel → startscherm moet volledig client-side verlopen zonder paginaherlading (SPA-navigatie via Vue Router).
 - Zorg voor een duidelijke visuele blokkering van de applicatie zolang de cookiekeuze niet is gemaakt (bijv. een modal overlay die de rest van de UI blokkeert).
@@ -24,11 +24,10 @@ De functionele cookie slaat per moeilijkheidsgraad het totaal aantal gespeelde e
 ### Taak 1: Cookie-consent store en persistentie
 
 1. Maak een Pinia-store `useCookieConsentStore` aan in `src/stores/cookieConsent.ts`.
-2. Definieer de state: `consentGiven: boolean`, `functionalAccepted: boolean` (altijd `true` eens gegeven), `adsenseAccepted: boolean`.
+2. Definieer de state: `consentGiven: boolean`, `functionalAccepted: boolean` (altijd `true` eens gegeven).
 3. Implementeer een actie `loadConsent()` die bij initialisatie de opgeslagen cookiewaarden uitleest en de state vult.
-4. Implementeer een actie `saveConsent(adsenseAccepted: boolean)` die:
+4. Implementeer een actie `saveConsent()` die:
    - `functionalAccepted` op `true` zet,
-   - `adsenseAccepted` instelt op de meegegeven waarde,
    - `consentGiven` op `true` zet,
    - de keuze opslaat als persistente cookie (vervaldatum bijv. 365 dagen).
 5. Roep `loadConsent()` aan bij het bootstrappen van de app in `src/main.ts`.
@@ -60,9 +59,8 @@ De functionele cookie slaat per moeilijkheidsgraad het totaal aantal gespeelde e
 3. De banner toont:
    - Een titel en korte uitleg over de cookies.
    - Een bullet/sectie "Functionele cookies" met uitleg dat deze verplicht zijn en altijd geactiveerd worden.
-   - Een bullet/sectie "Google AdSense-cookies" met uitleg en twee knoppen: "Accepteer alle cookies" en "Weiger advertentiecookies".
-4. Klik op "Accepteer alle cookies": roept `saveConsent(true)` aan op de store.
-5. Klik op "Weiger advertentiecookies": roept `saveConsent(false)` aan op de store.
+   - Een knop "Accepteer cookies".
+4. Klik op "Accepteer cookies": roept `saveConsent()` aan op de store.
 6. Na opslaan verdwijnt de overlay automatisch (reactief via `consentGiven`).
 7. Resultaat: de gebruiker kan de cookiebanner zien en een keuze maken.
 
@@ -100,7 +98,7 @@ De functionele cookie slaat per moeilijkheidsgraad het totaal aantal gespeelde e
 
 1. `useCookieConsentStore`:
    - `loadConsent()` vult de state correct vanuit een gesimuleerde cookie.
-   - `saveConsent(true/false)` schrijft de juiste waarden naar de cookie en zet `consentGiven` op `true`.
+   - `saveConsent()` schrijft de keuze naar de cookie en zet `consentGiven` op `true`.
    - Na een versversing (opnieuw aanroepen `loadConsent()`) is de staat hersteld.
 
 2. `useStatsStore`:
@@ -111,8 +109,7 @@ De functionele cookie slaat per moeilijkheidsgraad het totaal aantal gespeelde e
 
 3. `CookieBanner.vue`:
    - De component rendert wanneer `consentGiven === false`.
-   - Klik "Accepteer alle cookies" roept `saveConsent(true)` aan.
-   - Klik "Weiger advertentiecookies" roept `saveConsent(false)` aan.
+   - Klik "Accepteer cookies" roept `saveConsent()` aan.
    - De component verdwijnt nadat consent is gegeven.
 
 4. `StartschermView.vue`:

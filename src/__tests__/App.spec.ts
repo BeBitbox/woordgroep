@@ -43,7 +43,7 @@ describe('App', () => {
     setActivePinia(pinia)
 
     // Simuleer opgeslagen consent
-    const data = encodeURIComponent(JSON.stringify({ consentGiven: true, adsenseAccepted: false }))
+    const data = encodeURIComponent(JSON.stringify({ consentGiven: true }))
     document.cookie = `woordgroep-consent=${data};path=/`
 
     const { useCookieConsentStore } = await import('../stores/cookieConsent')

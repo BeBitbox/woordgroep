@@ -8,7 +8,6 @@ Het resultaat is een website die indexeerbaar is door zoekmachines, juridisch co
 ## Notities
 
 - De website is Nederlandstalig en richt zich op de Belgische en Nederlandse markt — AVG/GDPR-compliance is verplicht.
-- Google AdSense is reeds voorzien in de cookie-consent flow; de AdSense-publisher-ID moet nog geconfigureerd worden.
 - De site is een SPA (Vue 3 + Vite) gehost op AWS S3 + CloudFront — traditionele server-side SEO-technieken (SSR) zijn niet beschikbaar. Focus ligt op correcte `<meta>`-tags, `sitemap.xml` en `robots.txt` als statische bestanden in de `public/`-map.
 - `robots.txt` en `sitemap.xml` komen in `public/` zodat Vite ze ongewijzigd naar `dist/` kopieert.
 - Open Graph- en Twitter Card-tags verhogen de deelbaarheid op sociale media.
@@ -42,7 +41,7 @@ Het resultaat is een website die indexeerbaar is door zoekmachines, juridisch co
 2. Maak een nieuwe route `/disclaimer` aan in `src/router/index.ts`.
 3. Maak `src/views/PrivacybeleidView.vue` aan met de volledige privacyverklaring:
    - Verwerkingsverantwoordelijke (naam + contactgegevens invullen).
-   - Welke persoonsgegevens worden verwerkt: spelstatistieken (lokaal via cookies), AdSense (optioneel na consent).
+   - Welke persoonsgegevens worden verwerkt: spelstatistieken (lokaal via cookies).
    - Rechtsgrond: toestemming (art. 6 lid 1 sub a AVG).
    - Bewaartermijn: cookies verlopen na 365 dagen.
    - Rechten van de betrokkene: inzage, correctie, verwijdering, intrekking toestemming.
@@ -58,19 +57,7 @@ Het resultaat is een website die indexeerbaar is door zoekmachines, juridisch co
 
 ---
 
-### Taak 3: Google AdSense-integratie
-
-1. Voeg in `index.html` het AdSense-script toe als `async`-tag met de correcte publisher-ID (`ca-pub-XXXXXXXXXX`), maar enkel conditioneel geladen na expliciete toestemming van de gebruiker.
-2. Pas `src/stores/cookieConsent.ts` aan: voeg een `watch` toe op `adsenseAccepted` die het AdSense-script dynamisch inlaadt via een `<script>`-element als de waarde `true` wordt.
-3. Verifieer dat het script NIET geladen wordt als de gebruiker "Weiger advertentiecookies" klikt.
-4. Voeg een AdSense-advertentieblok toe als Vue-component `src/components/AdSenseBlok.vue` dat alleen rendert als `adsenseAccepted === true`.
-5. Plaats het advertentieblok op een logische plek in `StartschermView.vue` (onder de moeilijkheidskaarten).
-
-**Resultaat:** AdSense laadt enkel na expliciete toestemming, conform de AVG.
-
----
-
-### Taak 4: Technische productie-afwerking
+### Taak 3: Technische productie-afwerking
 
 1. Voeg een `<link rel="icon">` toe in `index.html` die verwijst naar een favicon (`/favicon.ico` of SVG).
 2. Maak een eenvoudig favicon aan (bijv. de letter "W" in het groen) en plaats het in `public/`.
@@ -113,13 +100,7 @@ Het resultaat is een website die indexeerbaar is door zoekmachines, juridisch co
 3. Verifieer dat de CookieBanner een klikbare link naar `/privacybeleid` toont.
 4. Verifieer dat de footer zichtbaar is op het startscherm én op de spelpagina.
 
-#### 5.4 AdSense-controle
-
-1. Accepteer cookies in de banner → het AdSense-script wordt geladen (controleer via DevTools → Network).
-2. Weiger cookies → het AdSense-script wordt NIET geladen.
-3. Wis cookies → herlaad de pagina → de banner verschijnt opnieuw.
-
-#### 5.5 Deployment-controle
+#### 5.4 Deployment-controle
 
 1. Push naar `master` en volg de GitHub Actions-run.
 2. Verifieer dat de S3-sync slaagt en de CloudFront-invalidatie uitgevoerd wordt.

@@ -27,31 +27,17 @@ describe('CookieBanner', () => {
     expect(wrapper.find('h2').text()).toBe('Cookiebeleid')
   })
 
-  it('toont de secties voor functionele en AdSense-cookies', () => {
+  it('toont de sectie voor functionele cookies', () => {
     const wrapper = mount(CookieBanner)
-    const tekst = wrapper.text()
-    expect(tekst).toContain('Functionele cookies')
-    expect(tekst).toContain('Google AdSense-cookies')
+    expect(wrapper.text()).toContain('Functionele cookies')
   })
 
-  it('roept saveConsent(true) aan bij klik op "Accepteer alle cookies"', async () => {
+  it('roept saveConsent() aan bij klik op "Accepteer cookies"', async () => {
     const store = useCookieConsentStore()
     const wrapper = mount(CookieBanner)
-    const knoppen = wrapper.findAll('button')
-    const accepteerKnop = knoppen.find((b) => b.text().includes('Accepteer alle cookies'))
-    await accepteerKnop!.trigger('click')
+    const knop = wrapper.find('button')
+    await knop.trigger('click')
     expect(store.consentGiven).toBe(true)
-    expect(store.adsenseAccepted).toBe(true)
-  })
-
-  it('roept saveConsent(false) aan bij klik op "Weiger advertentiecookies"', async () => {
-    const store = useCookieConsentStore()
-    const wrapper = mount(CookieBanner)
-    const knoppen = wrapper.findAll('button')
-    const weigerKnop = knoppen.find((b) => b.text().includes('Weiger advertentiecookies'))
-    await weigerKnop!.trigger('click')
-    expect(store.consentGiven).toBe(true)
-    expect(store.adsenseAccepted).toBe(false)
   })
 
   it('toont de "Altijd actief" badge voor functionele cookies', () => {

@@ -24,33 +24,20 @@ describe('useCookieConsentStore — saveConsent', () => {
   it('zet consentGiven op true na saveConsent', () => {
     const store = useCookieConsentStore()
     expect(store.consentGiven).toBe(false)
-    store.saveConsent(true)
+    store.saveConsent()
     expect(store.consentGiven).toBe(true)
   })
 
   it('zet functionalAccepted altijd op true', () => {
     const store = useCookieConsentStore()
-    store.saveConsent(false)
+    store.saveConsent()
     expect(store.functionalAccepted).toBe(true)
-  })
-
-  it('slaat adsenseAccepted correct op (true)', () => {
-    const store = useCookieConsentStore()
-    store.saveConsent(true)
-    expect(store.adsenseAccepted).toBe(true)
-  })
-
-  it('slaat adsenseAccepted correct op (false)', () => {
-    const store = useCookieConsentStore()
-    store.saveConsent(false)
-    expect(store.adsenseAccepted).toBe(false)
   })
 })
 
 describe('useCookieConsentStore — loadConsent', () => {
   it('herstelt de consent-staat vanuit een cookie', () => {
-    // Simuleer een opgeslagen consent-cookie
-    const data = encodeURIComponent(JSON.stringify({ consentGiven: true, adsenseAccepted: true }))
+    const data = encodeURIComponent(JSON.stringify({ consentGiven: true }))
     document.cookie = `woordgroep-consent=${data};path=/`
 
     const store = useCookieConsentStore()
@@ -58,7 +45,6 @@ describe('useCookieConsentStore — loadConsent', () => {
 
     expect(store.consentGiven).toBe(true)
     expect(store.functionalAccepted).toBe(true)
-    expect(store.adsenseAccepted).toBe(true)
   })
 
   it('laat state op false als er geen cookie is', () => {
@@ -72,16 +58,5 @@ describe('useCookieConsentStore — loadConsent', () => {
     const store = useCookieConsentStore()
     expect(() => store.loadConsent()).not.toThrow()
     expect(store.consentGiven).toBe(false)
-  })
-
-  it('herstelt adsenseAccepted=false correct', () => {
-    const data = encodeURIComponent(JSON.stringify({ consentGiven: true, adsenseAccepted: false }))
-    document.cookie = `woordgroep-consent=${data};path=/`
-
-    const store = useCookieConsentStore()
-    store.loadConsent()
-
-    expect(store.adsenseAccepted).toBe(false)
-    expect(store.consentGiven).toBe(true)
   })
 })

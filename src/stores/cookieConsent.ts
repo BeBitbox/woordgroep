@@ -1,18 +1,6 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
 
-const ADSENSE_PUBLISHER_ID = 'ca-pub-XXXXXXXXXX'
-
-function laadAdSenseScript(): void {
-  if (document.getElementById('adsense-script')) return
-  const script = document.createElement('script')
-  script.id = 'adsense-script'
-  script.async = true
-  script.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_PUBLISHER_ID}`
-  script.crossOrigin = 'anonymous'
-  document.head.appendChild(script)
-}
-
 const COOKIE_NAAM = 'woordgroep-consent'
 
 function leesCookie(naam: string): string | null {
@@ -31,7 +19,6 @@ function schrijfCookie(naam: string, waarde: string, dagen: number): void {
 export const useCookieConsentStore = defineStore('cookieConsent', () => {
   const consentGiven = ref(false)
   const functionalAccepted = ref(false)
-  const adsenseAccepted = ref(false)
 
   function loadConsent(): void {
     const raw = leesCookie(COOKIE_NAAM)
@@ -41,25 +28,18 @@ export const useCookieConsentStore = defineStore('cookieConsent', () => {
       if (data.consentGiven) {
         consentGiven.value = true
         functionalAccepted.value = true
-        adsenseAccepted.value = data.adsenseAccepted ?? false
       }
     } catch {
       // ongeldige cookie, negeer
     }
   }
 
-  function saveConsent(adsense: boolean): void {
+  function saveConsent(): void {
     functionalAccepted.value = true
-    adsenseAccepted.value = adsense
     consentGiven.value = true
-    const data = { consentGiven: true, adsenseAccepted: adsense }
+    const data = { consentGiven: true }
     schrijfCookie(COOKIE_NAAM, encodeURIComponent(JSON.stringify(data)), 365)
   }
 
-  // TODO Laad AdSense zodra toestemming gegeven wordt (ook bij herstel na paginalading)
- /* watch(adsenseAccepted, (gegeven) => {
-    if (gegeven) laadAdSenseScript()
-  })
-*/
-  return { consentGiven, functionalAccepted, adsenseAccepted, loadConsent, saveConsent }
+  return { consentGiven, functionalAccepted, loadConsent, saveConsent }
 })

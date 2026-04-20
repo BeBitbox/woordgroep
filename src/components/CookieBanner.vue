@@ -25,23 +25,9 @@ const store = useCookieConsentStore()
         </p>
       </div>
 
-      <div class="cookie-sectie">
-        <div class="cookie-sectie-header">
-          <span class="cookie-sectie-naam">Google AdSense-cookies</span>
-          <span class="cookie-badge cookie-badge--optioneel">Optioneel</span>
-        </div>
-        <p class="cookie-sectie-uitleg">
-          Wij maken gebruik van Google AdSense om gepersonaliseerde advertenties te tonen. Je kan
-          dit accepteren of weigeren.
-        </p>
-      </div>
-
       <div class="banner-acties">
-        <button class="knop knop--secundair" @click="store.saveConsent(false)">
-          Weiger advertentiecookies
-        </button>
-        <button class="knop knop--primair" @click="store.saveConsent(true)">
-          Accepteer alle cookies 🍪
+        <button class="knop knop--primair" @click="store.saveConsent()">
+          Accepteer cookies 🍪
         </button>
       </div>
     </div>
@@ -132,10 +118,6 @@ const store = useCookieConsentStore()
   color: var(--cookie-badge-verplicht-tekst);
 }
 
-.cookie-badge--optioneel {
-  background-color: var(--cookie-badge-optioneel-bg);
-  color: var(--cookie-badge-optioneel-tekst);
-}
 
 .cookie-sectie-uitleg {
   font-size: 0.8rem;
@@ -183,12 +165,4 @@ const store = useCookieConsentStore()
   background-color: var(--knop-hover);
 }
 
-.knop--secundair {
-  background-color: var(--cookie-secundair-bg);
-  color: var(--cookie-secundair-tekst);
-}
-
-.knop--secundair:hover {
-  background-color: var(--cookie-secundair-hover);
-}
 </style>

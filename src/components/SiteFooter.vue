@@ -3,6 +3,8 @@
     <RouterLink to="/privacybeleid">Privacybeleid</RouterLink>
     <span class="scheidingsteken">·</span>
     <RouterLink to="/disclaimer">Disclaimer</RouterLink>
+    <span class="scheidingsteken">·</span>
+    <span class="cookie-indicator" title="Enkel functionele cookie voor historiek bij te houden">🍪</span>
   </footer>
 </template>
 
@@ -27,5 +29,11 @@
 
 .scheidingsteken {
   margin: 0 0.5rem;
+}
+
+.cookie-indicator {
+  opacity: 0.5;
+  font-size: 0.75rem;
+  cursor: default;
 }
 </style>

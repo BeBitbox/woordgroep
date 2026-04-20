@@ -36,15 +36,6 @@ const router = useRouter()
           <strong>Cookievoorkeur</strong> — uw keuze omtrent cookies (accepteren of weigeren) wordt
           onthouden gedurende 365 dagen.
         </li>
-        <li>
-          <strong>Google AdSense</strong> (alleen na uw toestemming) — als u advertentiecookies
-          accepteert, plaatst Google AdSense cookies om gepersonaliseerde advertenties te tonen.
-          Raadpleeg het
-          <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer"
-            >privacybeleid van Google</a
-          >
-          voor meer informatie.
-        </li>
       </ul>
     </section>
 
@@ -53,8 +44,7 @@ const router = useRouter()
       <p>
         De verwerking van spelstatistieken en voortgang is gebaseerd op het
         <strong>gerechtvaardigd belang</strong> (art. 6 lid 1 sub f AVG) om u een functionerende
-        spelbeleving te bieden. De verwerking via Google AdSense is gebaseerd op uw uitdrukkelijke
-        <strong>toestemming</strong> (art. 6 lid 1 sub a AVG).
+        spelbeleving te bieden.
       </p>
     </section>
 
@@ -76,11 +66,6 @@ const router = useRouter()
           <strong>Recht op verwijdering</strong> — u kunt uw gegevens laten verwijderen. Omdat alle
           gegevens lokaal staan, kunt u dit zelf doen door uw browsercookies en localStorage te
           wissen.
-        </li>
-        <li>
-          <strong>Recht op intrekking van toestemming</strong> — u kunt uw toestemming voor
-          advertentiecookies te allen tijde intrekken door uw cookies te wissen en de banner opnieuw
-          te weigeren.
         </li>
         <li>
           <strong>Recht op klacht</strong> — u kunt een klacht indienen bij de
